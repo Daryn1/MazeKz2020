@@ -11,12 +11,14 @@ namespace WebMaze.Controllers
     {
         public IActionResult Khassenov()
         {
-            var heroes = new List<HeroViewModel>()
-            {
-                new HeroViewModel(){Name = "Knight", HP = 625, Mana = 150.0, Properties = new List<string>(){"Solid steel", "Sharp sword"}},
-                new HeroViewModel(){Name = "Mage", HP = 587, Mana = 175.5, Properties = new List<string>(){"Metal fists"}},
-                new HeroViewModel(){Name = "Alchemist",HP = 804, Mana = 100, Properties = new List<string>(){"Brutal view", "Axe attacks"}},
-            };
+            var heroes = new List<HeroViewModel>();
+            HeroViewModel knight = new HeroViewModel() { Name = "Knight", HP = 625, Mana = 150.0, Properties = new List<string>() { "Solid steel", "Sharp sword" } };
+            heroes.Add(knight);
+            HeroViewModel mage = new HeroViewModel() { Name = "Mage", HP = 587, Mana = 175.5, Properties = new List<string>() { "Sorcerer's miracle", "Cataclysm" } };
+            heroes.Add(mage);
+            HeroViewModel alchemist = new HeroViewModel() { Name = "Alchemist", HP = 804, Mana = 100, Properties = new List<string>() { "Poison rage", "Unshattered explosion" } };
+            heroes.Add(alchemist);
+
             return View(heroes);
         }
     }

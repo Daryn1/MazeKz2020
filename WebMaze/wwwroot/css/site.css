@@ -77,3 +77,18 @@ body {
     background: #1b6ec2;
     font-size: 30px;
 }
+
+
+
+/*S.Khassenov css styles*/
+div.heroes {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    border-bottom: 2px solid black;
+    padding: 20px;
+}
+li.property {
+    margin: 20px 0;
+    font-size: 1em;
+}

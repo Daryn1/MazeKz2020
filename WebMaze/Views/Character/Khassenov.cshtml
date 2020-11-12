@@ -2,7 +2,7 @@
 <h1>Heroes list: </h1>
 @foreach(var hero in Model)
 {
-<div style="display: flex; justify-content: space-around; margin-bottom: 20px; border-bottom: 2px solid black; padding: 20px;">
+<div class="heroes">
     <h1>@hero.Name</h1>
     <h1>HP - @hero.HP</h1>
     <h2>Mana - @hero.Mana</h2>
@@ -10,7 +10,7 @@
     <ul>
     @foreach (var prop in hero.Properties)
     {
-        <li style="margin: 20px 0; font-size: 1em;">@prop</li>
+        <li class="property">@prop</li>
     }
     </ul>
     </h3>
