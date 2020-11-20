@@ -48,24 +48,36 @@ namespace WebMaze.Controllers
 
         public IActionResult Mochalkin()
         {
-            var models = new List<HookahViewModel>();
+            var hookahs = new List<HookahViewModel>();
 
-            var maklaudViewModel = new HookahViewModel();
-            maklaudViewModel.Name = "Maklaud Skytech";
-            maklaudViewModel.Price = 26900;
-            maklaudViewModel.Material = "Stainless steel";
-            maklaudViewModel.ManufacturerCountry = "Russia";
-            maklaudViewModel.Height = 62;
-            maklaudViewModel.Url = "https://maklaud.ru/image/cache/catalog/Exlusive/Maklaud%20Skytech/Maklaud%20Skytech%20(7)-400x600.jpg";
-            models.Add(maklaudViewModel);
+            var desvallViewModel = new HookahViewModel();
+            desvallViewModel.Name = "Desvall";
+            desvallViewModel.Price = 40000;
+            desvallViewModel.Material = "Stainless steel, inlaid with gold, chromium";
+            desvallViewModel.ManufacturerCountry = "Sweden";
+            desvallViewModel.Discription = "Кальяны этой компании выполняютя вручную и по индивидуальным заказам. " +
+                                           "Есть модели из золота, с камнями Сваровски, хромированные. " +
+                                           "Есть кальян стоимостью 100 000$, который был сделан по индивидуальному заказу для марки Bugatti. " +
+                                           "Именно после презентации этого кальяна, компания обрела известность и популярность.";
+            desvallViewModel.Url = "/image/Mochalkin/Desvall.jpg";
+            hookahs.Add(desvallViewModel);
 
-            var vinsentViewModel = new HookahViewModel();
-            vinsentViewModel.Name = "Indroduce Vinsent Vega!";
-            vinsentViewModel.Price = null;
-            vinsentViewModel.Url = "https://i.gifer.com/origin/3e/3e6bcf910e0ba9422b6e1ea79cdc6665_w200.webp";
-            models.Add(vinsentViewModel);
+            var aurentumViewModel = new HookahViewModel();
+            aurentumViewModel.Name = "Aurentum";
+            aurentumViewModel.Price = 1000000;
+            aurentumViewModel.Material = "Gold, rhrodium, silver";
+            aurentumViewModel.ManufacturerCountry = "Switzerland";
+            aurentumViewModel.Discription = "На данный момент самым дорогим кальяном является изобретение марки " +
+                                            "Aurentum Switzerland. Он оценивается в 1 миллион американских долларов. " +
+                                            "Его украшают рубины и брильянты. Для производства трубки, точнее ее покрытия, " +
+                                            "применили родий и серебро. Изделие декорировано изысканными платиновыми фигурами " +
+                                            "жучков-скарабеев. При производстве кальяна использовали 12 килограммов 24-каратного " +
+                                            "золота. Также вы можете заказать собственный дизайн кальяна, но эта услуга платная, " +
+                                            "и начинается от 70 тысяч долларов.";
+            aurentumViewModel.Url = "/image/Mochalkin/Aurentum.jpg";
+            hookahs.Add(aurentumViewModel);
 
-            return View(models);
+            return View(hookahs);
         }
     }
 }
