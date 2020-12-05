@@ -1,0 +1,45 @@
+﻿body {
+
+}
+
+.item {
+    display: block;
+    color: #000000;
+    text-decoration: none;
+    background-color: #0999b4;
+    padding: 1em;
+    white-space: nowrap;
+}
+
+.drop:hover > .item,
+.item:hover {
+    background-color: #ffd800;
+}
+
+
+.menu{
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+}
+
+.drop {
+    position: relative;
+}
+
+.drop:hover > .submenu{
+    display: flex;
+    clip: auto;
+    width: auto;
+    height: auto;
+    margin: 0;
+}
+.submenu {
+    flex-direction: column;
+    position: absolute;
+    clip: rect(0 0 0 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+}
+
