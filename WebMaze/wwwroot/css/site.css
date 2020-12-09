@@ -383,7 +383,8 @@ body {
     font-size: 22px;
     text-align: end;
     box-shadow: 1px 1px 1px 1px #d0bdad;
-}
+
+
 .games_name {
     color: white;
     font-size: 30px;
@@ -433,43 +434,3 @@ body {
     background: green;
     font-size: 30px;
 }
-
-.hookah-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.hookah-information {
-    display: block;
-    background: #fc3;
-    text-align: center;
-    border: 2px solid chocolate;
-    margin: 1%;
-    border-radius: 0 40px;
-    padding: 20px;
-}
-
-.hookah-container .image-container img {
-    display: flex;
-    justify-content: center;
-    flex: 0.7;
-}
-
-.video-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.video-container .video-title {
-    background: #fc3;
-    padding: 10px;
-    border: 2px solid chocolate;
-    margin: 1%;
-    border-radius: 0 30px;
-    width: 50%;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-} 
