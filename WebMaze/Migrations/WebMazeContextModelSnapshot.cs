@@ -59,21 +59,6 @@ namespace WebMaze.Migrations
 
                     b.ToTable("CitizenUser");
                 });
-
-            modelBuilder.Entity("WebMaze.DbStuff.Model.HealthDepartment", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("HealthDepartment");
-                });
 #pragma warning restore 612, 618
         }
     }

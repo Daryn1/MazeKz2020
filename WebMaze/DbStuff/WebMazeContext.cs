@@ -13,8 +13,6 @@ namespace WebMaze.DbStuff
 
         public DbSet<Adress> Adress { get; set; }
 
-        public DbSet<HealthDepartment> HealthDepartment { get; set; }
-
         public WebMazeContext(DbContextOptions dbContext) : base(dbContext) { }
     }
 }
