@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\image\Maralov\" />
-    <Folder Include="wwwroot\image\avatar\" />
   </ItemGroup>
 
 </Project>
