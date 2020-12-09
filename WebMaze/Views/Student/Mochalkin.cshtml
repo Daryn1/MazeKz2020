@@ -1,25 +1,48 @@
 ﻿@model List<HookahViewModel>
 
-<div>
-    Как же мой ноут это всё не тянет. Исус, Мария и Иосиф ( >_|_< )
-</div>
-<div>
-    Новое видео Антона Птушкина
+<div class="hookah-container">
+    @foreach (var hookah in Model)
+    {
+        <div class="hookah-information">
+            <div class="model name">
+                <div>
+                    <h5>Название модели</h5>
+                </div>
+                @hookah.Name
+            </div>
+            <div class="material">
+                <h5>Материал изготовления</h5>
+                @hookah.Material
+            </div>
+            <div class="mnufacturer">
+                <h5>Страна производитель</h5>
+                @hookah.ManufacturerCountry
+            </div>
+            <div class="priceHookah">
+                <h5>Стоимость</h5>
+                @String.Format("{0:C}", hookah.Price)
+            </div>
+            <div class="Discribe">
+                @hookah.Discription
+            </div>
+        </div>
+
+        <figure class="image-container">
+            <img src="@hookah.Url" />
+        </figure>
+    }
 </div>
 
-<div>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/BNdJaetPrlg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-    </iframe>
-
-</div>
-
-@foreach (var hookah in Model)
-{
-    <div>
-        @hookah.Name @hookah.Height @hookah.Material @hookah.ManufacturerCountry @String.Format("{0:C}", hookah.Price)
+<div class="video-container">
+    <div class="video-title">
+        <h5>Новое видео Антона Птушкина</h5>
     </div>
 
     <div>
-        <img src="@hookah.Url" />
+        <div class="src-container">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/BNdJaetPrlg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+            </iframe>
+
+        </div>
     </div>
-}
+</div>
