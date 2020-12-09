@@ -6,8 +6,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using MazeKz;
-using Microsoft.AspNetCore.Mvc;
 using WebMaze.DbStuff;
 using WebMaze.DbStuff.Model;
 using WebMaze.Models;
