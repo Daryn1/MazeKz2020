@@ -58,7 +58,6 @@ namespace WebMaze
             var mapperConfiguration = new MapperConfiguration(configurationExpression);
             var mapper = new Mapper(mapperConfiguration);
             services.AddScoped<IMapper>(s => mapper);
-
         }
 
         private void RegistrationRepository(IServiceCollection services)
