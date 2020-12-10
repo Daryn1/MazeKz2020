@@ -9,6 +9,7 @@ namespace Housing.Infrastructure.Repositories
 {
     public class HouseRepository : ModelRepository<House, HouseResidentDto>, IHouseRepository
     {
+        private int a;
         public HouseRepository(ModelContext context, IMapper mapper) : base(context, mapper)
         {
         }
