@@ -4,7 +4,7 @@ using Housing.Core.Models;
 
 namespace Housing.Core.Interfaces.Repositories
 {
-    public interface IHouseRepository : IModelRepository<House, HouseResidentDto>
+    public interface IHouseRepository : IModelRepository<House, HouseDto>
     {
         Task<bool> UpdateName(House model, string name);
         Task<bool> UpdateStreet(House model, string street);

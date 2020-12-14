@@ -11,9 +11,12 @@ namespace Housing.Core.Helpers
     {
         public MapperProfiles()
         {
-            CreateMap<House, HouseResidentDto>();
-            CreateMap<HouseResident, HouseResidentDto>();
-            CreateMap<Owner, OwnerDto>();
+            CreateMap<House, HouseDto>();
+            CreateMap<HouseDto, House>();
+            CreateMap<Comment, CommentDto>();
+            CreateMap<CommentDto, Comment>();
+            CreateMap<HousingUser, HousingUserDto>();
+            CreateMap<HousingUserDto, HousingUser>();
         }
     }
 }

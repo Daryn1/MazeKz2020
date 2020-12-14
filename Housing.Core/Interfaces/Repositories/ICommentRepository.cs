@@ -6,7 +6,8 @@ using System.Text;
 
 namespace Housing.Core.Interfaces.Repositories
 {
-    public interface IHouseResidentRepository : IModelRepository<HouseResident, HouseResidentDto>
+    public interface ICommentRepository : IModelRepository<Comment, CommentDto>
     {
+
     }
 }

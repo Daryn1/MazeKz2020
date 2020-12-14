@@ -12,7 +12,7 @@ namespace Housing.Infrastructure.Repositories
     public class ModelRepository<T,D> : IModelRepository<T, D> where T : class where D : class
     {
         protected ModelContext Context;
-        protected IMapper Mapper;
+        protected readonly IMapper Mapper;
         public ModelRepository(ModelContext context, IMapper mapper)
         {
             Context = context;
@@ -36,13 +36,13 @@ namespace Housing.Infrastructure.Repositories
             return await Context.SaveChangesAsync() > 0;
         }
 
-        public virtual async Task<bool> DeleteById(Guid id)
+        public virtual async Task<bool> DeleteById(long id)
         {
             Context.Set<T>().Remove(await Context.Set<T>().FindAsync(id));
             return await Context.SaveChangesAsync() > 0;
         }
 
-        public virtual async Task<D> GetById(Guid id)
+        public virtual async Task<D> GetById(long id)
         {
             var model = await Context.Set<T>().FindAsync(id);
             return Mapper.Map<D>(model);
@@ -51,6 +51,11 @@ namespace Housing.Infrastructure.Repositories
         public virtual async Task<ICollection<D>> GetAll()
         {
            return await Context.Set<T>().AsNoTracking().Select(m => Mapper.Map<D>(m)).ToListAsync();
+        }
+
+        public virtual async Task<bool> HasEntity(T model)
+        {
+            return await Context.Set<T>().ContainsAsync(model);
         }
     }
 }

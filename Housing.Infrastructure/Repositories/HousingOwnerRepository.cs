@@ -6,13 +6,12 @@ using Housing.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Housing.Infrastructure.Repositories
 {
-    public class HouseResidentRepository : ModelRepository<HouseResident, HouseResidentDto>, IHouseResidentRepository
+    public class HousingOwnerRepository : ModelRepository<HousingOwner, HousingOwnerDto>, IHousingOwnerRepository
     {
-        public HouseResidentRepository(ModelContext context, IMapper mapper) : base(context, mapper)
+        public HousingOwnerRepository(ModelContext context, IMapper mapper) : base(context, mapper)
         {
         }
     }

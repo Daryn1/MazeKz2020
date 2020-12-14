@@ -1,17 +1,29 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Housing.Core.DTOs;
 using Housing.Core.Interfaces.Repositories;
 using Housing.Core.Models;
 using Housing.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Housing.Infrastructure.Repositories
 {
-    public class HouseRepository : ModelRepository<House, HouseResidentDto>, IHouseRepository
+    public class HouseRepository : ModelRepository<House, HouseDto>, IHouseRepository
     {
-        private int a;
         public HouseRepository(ModelContext context, IMapper mapper) : base(context, mapper)
         {
+        }
+
+        public override async Task<ICollection<HouseDto>> GetAll()
+        {
+            return await Context.Houses.AsNoTracking().Include(h => h.HousingUsers).Include(h => h.Owner).Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
+        }
+        public override async Task<HouseDto> GetById(long id)
+        {
+            var house = await Context.Houses.AsNoTracking().Include(h => h.HousingUsers).Include(h => h.Owner).FirstOrDefaultAsync(o => o.HouseId == id);
+            return Mapper.Map<HouseDto>(house);
         }
 
         public Task<bool> UpdateName(House model, string name)
