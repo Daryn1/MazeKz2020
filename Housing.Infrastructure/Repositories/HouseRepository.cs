@@ -18,12 +18,12 @@ namespace Housing.Infrastructure.Repositories
 
         public override async Task<ICollection<HouseDto>> GetAll()
         {
-            return await Context.Houses.AsNoTracking().Include(h => h.HousingUsers).Include(h => h.Owner).Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
+            return await Context.Houses.AsNoTracking().Include(h => h.Owner).Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
         }
-        public override async Task<HouseDto> GetById(long id)
+        public override async Task<House> GetById(long id)
         {
-            var house = await Context.Houses.AsNoTracking().Include(h => h.HousingUsers).Include(h => h.Owner).FirstOrDefaultAsync(o => o.HouseId == id);
-            return Mapper.Map<HouseDto>(house);
+           return await Context.Houses.AsNoTracking().Include(h => h.HousingUsers).Include(h => h.Owner).ThenInclude(o => o.User).
+                FirstOrDefaultAsync(o => o.HouseId == id);
         }
 
         public Task<bool> UpdateName(House model, string name)

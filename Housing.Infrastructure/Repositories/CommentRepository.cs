@@ -18,10 +18,9 @@ namespace Housing.Infrastructure.Repositories
         {
         }
 
-        public override async Task<CommentDto> GetById(long id)
+        public override async Task<Comment> GetById(long id)
         {
-            var comment = await Context.HouseAdvertisementComments.AsNoTracking().Include(c => c.HousingUser).FirstOrDefaultAsync(c => c.CommentId == id);
-            return Mapper.Map<CommentDto>(comment);
+           return await Context.HouseAdvertisementComments.AsNoTracking().Include(c => c.HousingUser).FirstOrDefaultAsync(c => c.CommentId == id);
         }
 
         public override async Task<ICollection<CommentDto>> GetAll()

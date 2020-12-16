@@ -1,11 +1,6 @@
-﻿@{ 
-    Layout = "_Layout";
-}
-@using Housing.Core.DTOs
-@using Housing.Core.Enums
-@model HouseDto
+﻿@model HouseDto
 <form class="container-fluid" method="post" asp-controller="Housing" asp-action="AddHouse">
-    <div class="form-group">@ViewBag.ErrorMessage</div>
+    <div class="form-group badge badge-danger">@ViewBag.ErrorMessage</div>
     <h1 class="form-group display-4" style="text-align: center;">Добавление недвижимости</h1>
     <div class="form-group">
         <label for="houseName">Название недвижимости</label>

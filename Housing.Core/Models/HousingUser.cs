@@ -13,5 +13,6 @@ namespace Housing.Core.Models
         public CitizenUser User { get; set; }
         public long HouseId { get; set; }
         public House House { get; set; }
+        
     }
 }

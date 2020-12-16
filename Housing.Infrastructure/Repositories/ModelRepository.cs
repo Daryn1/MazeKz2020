@@ -18,10 +18,11 @@ namespace Housing.Infrastructure.Repositories
             Context = context;
             Mapper = mapper;
         }
-        public virtual async Task<bool> Create(T model)
+        public virtual async Task<T> Create(T model)
         {
             await Context.Set<T>().AddAsync(model);
-            return await Context.SaveChangesAsync() > 0;
+            await Context.SaveChangesAsync();
+            return model;
         }
 
         public virtual async Task<bool> Update(T model)
@@ -42,10 +43,9 @@ namespace Housing.Infrastructure.Repositories
             return await Context.SaveChangesAsync() > 0;
         }
 
-        public virtual async Task<D> GetById(long id)
+        public virtual async Task<T> GetById(long id)
         {
-            var model = await Context.Set<T>().FindAsync(id);
-            return Mapper.Map<D>(model);
+            return await Context.Set<T>().FindAsync(id);
         }
 
         public virtual async Task<ICollection<D>> GetAll()

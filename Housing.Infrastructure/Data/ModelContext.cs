@@ -8,7 +8,8 @@ namespace Housing.Infrastructure.Data
     {
         public DbSet<CitizenUser> Users { get; set; }
         public DbSet<House> Houses { get; set; }
-        public DbSet<HousingUser> HousingUsers { get; set; }
+        public DbSet<HousingUser> HouseResidents { get; set; }
+        public DbSet<HousingOwner> HouseOwners { get; set; }
         public DbSet<Comment> HouseAdvertisementComments { get; set; }
         public ModelContext(DbContextOptions<ModelContext> options) : base(options)
         {

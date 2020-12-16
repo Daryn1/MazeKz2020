@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
+
 namespace Housing
 {
     public class Startup
@@ -34,6 +36,15 @@ namespace Housing
             services.AddHousingRepositories();
             services.AddDbContext<ModelContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), assembly => assembly.MigrationsAssembly("Housing.Infrastructure")));
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = "Housing.Session";
+                options.IdleTimeout = TimeSpan.FromMinutes(60);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            services.AddDistributedMemoryCache();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,8 +59,8 @@ namespace Housing
 
             app.UseRouting();
 
-           // app.UseAuthorization();
-
+            // app.UseAuthorization();
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

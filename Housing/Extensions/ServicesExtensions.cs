@@ -15,6 +15,7 @@ namespace Housing.Extensions
             services.AddScoped<IHouseRepository, HouseRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<IHousingUserRepository, HousingUserRepository>();
+            services.AddScoped<IHousingOwnerRepository, HousingOwnerRepository>();
             services.AddScoped<ICitizenUserRepository, CitizenUserRepository>();
         }
     }

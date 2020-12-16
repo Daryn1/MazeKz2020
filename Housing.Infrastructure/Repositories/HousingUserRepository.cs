@@ -18,17 +18,17 @@ namespace Housing.Infrastructure.Repositories
         {
         }
 
-        public override async Task<HousingUserDto> GetById(long id)
+        /*public override async Task<HousingUserDto> GetById(long id)
         {
-            var resident = await Context.HousingUsers.AsNoTracking().Include(r => r.Houses).
+            var resident = await Context.HousingUsers.AsNoTracking().
                 Include(r => r.House).Include(r => r.User).FirstOrDefaultAsync(r => r.Id == id);
             return Mapper.Map<HousingUserDto>(resident);
         }
 
         public override async Task<ICollection<HousingUserDto>> GetAll()
         {
-            var users = await Context.HousingUsers.AsNoTracking().Include(r => r.Houses).Include(r => r.House).Include(r => r.User).Select(r => Mapper.Map<HousingUserDto>(r)).ToListAsync();
+            var users = await Context.HousingUsers.AsNoTracking().Include(r => r.House).Include(r => r.User).Select(r => Mapper.Map<HousingUserDto>(r)).ToListAsync();
             return users;
-        }
+        }*/
     }
 }
