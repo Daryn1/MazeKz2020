@@ -6,6 +6,7 @@ namespace Housing.Core.Enums
 {
     public enum HouseType
     {
+        Ничего,
         Вилла,
         Особняк,
         Коттедж,

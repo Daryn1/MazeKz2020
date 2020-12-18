@@ -14,5 +14,12 @@ namespace Housing.Infrastructure.Data
         public ModelContext(DbContextOptions<ModelContext> options) : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<House>().HasOne(h => h.Owner).WithMany(o => o.Houses).OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

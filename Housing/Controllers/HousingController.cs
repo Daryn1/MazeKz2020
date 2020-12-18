@@ -26,6 +26,17 @@ namespace Housing.Controllers
         {
             return View();
         }
+        [HttpGet("/housing/houses/maxprice")]
+        public async Task<double> GetMaxHousePrice()
+        {
+            return await _repos.GetMaxHousePrice();
+        }
+        [HttpGet("/housing/houses/minprice")]
+        public async Task<double> GetMinHousePrice()
+        {
+            return await _repos.GetMinHousePrice();
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddHouse(HouseDto house)
         {
@@ -35,16 +46,28 @@ namespace Housing.Controllers
                 error = "Заполните все поля";
                 return Redirect("/profile?houseCreateErrorMessage=" + error);
             }
+            if(house.Type == HouseType.Ничего)
+            {
+                error = "Выберите тип недвижимости";
+                return Redirect("/profile?houseCreateErrorMessage=" + error);
+            }
             var houseModel = _mapper.Map<House>(house);
             houseModel.OwnerId = long.Parse(HttpContext.Session.GetString("Id"));
             if (await _repos.Create(houseModel) != null) return Redirect("/profile");
             error = "Не удалось опубликовать недвижимость";
             return Redirect("/profile?houseCreateErrorMessage=" + error);
         }
-        public async Task<IActionResult> Houses(string errorMessage)
+        public async Task<IActionResult> Houses(string errorMessage, FilteredHouseDto house)
         {
-            ViewBag.LoginErrorMessage = errorMessage;
-            ViewBag.Houses = await _repos.GetAll();
+            if (!house.HasAllDefaultValues())
+            {
+                ViewBag.Houses = await _repos.GetFilteredHouses(house);
+            }
+            else
+            {
+                ViewBag.LoginErrorMessage = errorMessage;
+                ViewBag.Houses = await _repos.GetAll();
+            }
             return View();
         }
         [Route("/Housing/Houses/id={id}")]

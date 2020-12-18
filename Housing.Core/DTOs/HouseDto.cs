@@ -18,7 +18,6 @@ namespace Housing.Core.DTOs
         public bool IsBought { get; set; }
         [Required]
         public double Price { get; set; }
-        [Required]
         public HouseType Type { get; set; }
         public ICollection<HousingUserDto> HouseResidents { get; set; }
         public long OwnerId { get; set; }

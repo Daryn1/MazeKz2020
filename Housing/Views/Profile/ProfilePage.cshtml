@@ -1,6 +1,7 @@
 ﻿@{ 
     Layout = "_Layout";
     ViewData["Title"] = "Profile";
+    int count = 1;
 }
 @model HousingOwnerDto
 <div class="container emp-profile">
@@ -8,29 +9,25 @@
             <div class="col-md-4">
                 <div class="profile-img">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt="" />
-                    <div class="file btn btn-lg btn-primary">
-                        Change Photo
-                        <input type="file" name="file" />
-                    </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="profile-head">
                     <h5>
                         @Model.User.Login
                     </h5>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Обо мне</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Timeline</a>
+                            <a class="nav-link" id="myhouses-tab" data-toggle="tab" href="#myhouses" role="tab" aria-controls="myhouses" aria-selected="false">Моя недвижимость</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Опубликовать недвижимость</a>
                         </li>
                     </ul>
                 </div>
-            </div>
-            <div class="col-md-2">
-                <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile" />
             </div>
         </div>
         <div class="row">
@@ -65,7 +62,22 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                        @await Html.PartialAsync("AddHouse", new HouseDto()) 
+                        @await Html.PartialAsync("AddHouse", new HouseDto())
+                    </div>
+                    <div class="tab-pane fade" id="myhouses" role="tabpanel" aria-labelledby="profile-tab">
+                        @foreach (var house in Model.Houses)
+                        {
+                            <div class="card">
+                                <h5 class="card-header">@count</h5>
+                                <div class="card-body">
+                                    <h5 class="card-title">@house.Name</h5>
+                                    <p class="card-text text-primary">@Enum.GetName(typeof(HouseType), house.Type + 1)</p>
+                                    <p class="card-text text-success">@house.Price KZT</p>
+                                    <a href="/Housing/Houses/id=@house.HouseId" class="btn btn-primary">Узнать больше</a>
+                                </div>
+                            </div>
+                            count++;
+                        }
                     </div>
                 </div>
             </div>

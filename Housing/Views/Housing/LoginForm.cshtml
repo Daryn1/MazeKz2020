@@ -14,7 +14,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                             </div>
-                            <input asp-for="@Model.Login" class="form-control" placeholder="Email or login" type="text">
+                            <input asp-for="@Model.Login" class="form-control" placeholder="Введите свой никнейм" type="text">
                         </div> <!-- input-group.// -->
                     </div> <!-- form-group// -->
                     <div class="form-group">
@@ -22,13 +22,12 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                             </div>
-                            <input asp-for="@Model.Password" class="form-control" placeholder="******" type="password">
+                            <input asp-for="@Model.Password" class="form-control" placeholder="Введите свой пароль" type="password">
                         </div> <!-- input-group.// -->
                     </div> <!-- form-group// -->
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block"> Login  </button>
-                    </div> <!-- form-group// -->
-                    <p class="text-center"><a href="#" class="btn">Forgot password?</a></p>
+                        <button type="submit" class="btn btn-primary btn-block"> Войти  </button>
+                    </div>
                 </form>
             </article>
         </div>

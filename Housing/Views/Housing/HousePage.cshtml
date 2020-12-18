@@ -22,7 +22,7 @@
                         <p href="#" class="list-group-item list-group-item-action">
                             Название: @Model.Name
                         </p>
-                        <p class="list-group-item list-group-item-action">Тип: <span class="badge badge-primary">@Enum.GetName(typeof(HouseType), Model.Type)</span></p>
+                        <p class="list-group-item list-group-item-action">Тип: <span class="badge badge-primary">@Enum.GetName(typeof(HouseType), (Model.Type + 1))</span></p>
                         <p class="list-group-item list-group-item-action">Улица: <span class="badge badge-warning">@Model.Street</span></p>
                         <p class="list-group-item list-group-item-action">Количество жителей: <span class="badge badge-info">0</span></p>
                         <p class="list-group-item list-group-item-action">Стоимость: <span class="badge badge-success">@Model.Price KZT</span></p>
@@ -56,7 +56,7 @@
 
                                     <h4 class="media-heading user_name">Baltej Singh</h4>
                                     <p class="comment-text">
-                                        Trash ebannyy suka blyat
+                                        Рандомный коммент
                                     </p>
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
 
                                     <h4 class="media-heading user_name">Baltej Singh</h4>
                                     <p class="comment-text">
-                                        Trash ebannyy suka blyat
+                                        Рандомный коммент номер 2
                                     </p>
                                 </div>
                             </div>

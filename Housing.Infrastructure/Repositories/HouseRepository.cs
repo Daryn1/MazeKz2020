@@ -26,34 +26,50 @@ namespace Housing.Infrastructure.Repositories
                 FirstOrDefaultAsync(o => o.HouseId == id);
         }
 
-        public Task<bool> UpdateName(House model, string name)
+        public async Task<ICollection<HouseDto>> GetFilteredHouses(FilteredHouseDto house)
         {
-            model.Name = name;
-            return Update(model);
+            bool hasPrice = house.Price != default, hasStreet = !string.IsNullOrEmpty(house.Street), 
+                hasType = house.Type != Core.Enums.HouseType.Ничего;
+            if (hasType) house.Type -= 1;
+                if (hasPrice && hasStreet && hasType)
+                    return await Context.Houses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
+                    (h.Price >= house.Price - 1000000 && h.Price <= house.Price + 1000000) && h.Type == house.Type).AsNoTracking().
+                    Include(h => h.Owner).Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
+                else if (hasPrice && hasType)
+                    return await Context.Houses.Where(h => (h.Price >= house.Price - 1000000 && h.Price <= house.Price + 1000000) &&
+                    h.Type == house.Type).AsNoTracking().
+                    Include(h => h.Owner).Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
+                else if (hasStreet && hasType)
+                    return await Context.Houses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
+                    h.Type == house.Type).AsNoTracking().
+                    Include(h => h.Owner).Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
+                else if(hasPrice && hasStreet)
+                    return await Context.Houses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
+                    (h.Price >= house.Price - 1000000 && h.Price <= house.Price + 1000000)).AsNoTracking().
+                    Include(h => h.Owner).Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
+                else if(hasPrice)
+                    return await Context.Houses.Where(h => 
+                    (h.Price >= house.Price - 1000000 && h.Price <= house.Price + 1000000)).AsNoTracking().
+                    Include(h => h.Owner).Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
+                else if(hasStreet)
+                    return await Context.Houses.Where(h => EF.Functions.Like(h.Street, house.Street)).AsNoTracking().
+                    Include(h => h.Owner).Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
+                else if(hasType)
+                    return await Context.Houses.Where(h => h.Type == house.Type).AsNoTracking().
+                    Include(h => h.Owner).Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
+                else
+                    return await Context.Houses.AsNoTracking().
+                    Include(h => h.Owner).Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
         }
 
-        public Task<bool> UpdateStreet(House model, string street)
+        public async Task<double> GetMaxHousePrice()
         {
-            model.Street = street;
-            return Update(model);
+            return await Context.Houses.MaxAsync(h => h.Price);
         }
 
-        public Task<bool> UpdateInfo(House model, string info)
+        public async Task<double> GetMinHousePrice()
         {
-            model.Info = info;
-            return Update(model);
-        }
-
-        public Task<bool> UpdatePrice(House model, double price)
-        {
-            model.Price = price;
-            return Update(model);
-        }
-
-        public Task<bool> UpdateStatus(House model, bool isBought)
-        {
-            model.IsBought = isBought;
-            return Update(model);
+            return await Context.Houses.MinAsync(h => h.Price);
         }
     }
 }
