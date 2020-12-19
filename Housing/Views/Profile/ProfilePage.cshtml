@@ -6,12 +6,12 @@
 @model HousingOwnerDto
 <div class="container emp-profile">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <div class="profile-img">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt="" />
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog"/>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="profile-head">
                     <h5>
                         @Model.User.Login
@@ -31,33 +31,42 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-2">
             </div>
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="tab-content profile-tab" id="myTabContent">
                     <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <span class="badge badge-danger">@ViewBag.BalanceErrorMessage</span>
                         <div class="row">
-                            <div class="col-md-6">
-                                <label>Username:</label>
+                            <div class="col-md-2">
+                                <label>Имя пользователя:</label>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-2">
                                 <p>@Model.User.Login</p>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Password</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>@Model.User.Password</p>
+                            <div class="col-md-8">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
-                                <label>AvatarUrl:</label>
+                            <div class="col-md-2">
+                                <label>Баланс кошелька:</label>
                             </div>
-                            <div class="col-md-6">
-                                <p>@Model.User.AvatarUrl</p>
+                            <div class="col-md-2">
+                                <p>@Model.Balance KZT</p>
+                            </div>
+                            <div class="col-md-8">
+                                <form class="updatebalance-form" method="post" action="/Profile/id=@Model.Id/update/balance">
+                                    <div class="row">
+                                        <button type="button" class="btn btn-success d-block col-md-3 updateBalanceBtn">Пополнить баланс</button>
+                                        <div class="updateBalance col-md-9 row">
+                                            <div class="form-row col-md-8">
+                                                <input type="number" class="form-control" name="balance" />
+                                            </div>
+                                            <div class="col-md-1"></div>
+                                            <button type="submit" class="btn d-block col-md-3 btn-primary">Отправить</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -65,11 +74,15 @@
                         @await Html.PartialAsync("AddHouse", new HouseDto())
                     </div>
                     <div class="tab-pane fade" id="myhouses" role="tabpanel" aria-labelledby="profile-tab">
+                        <h3 class="text-danger">@ViewBag.DeleteHouseErrorMessage</h3>
                         @foreach (var house in Model.Houses)
                         {
                             <div class="card">
                                 <h5 class="card-header">@count</h5>
                                 <div class="card-body">
+                                    <form style="text-align: right;" method="post" action="/Housing/Houses/id=@house.HouseId/delete">
+                                    <button type="submit" class="btn btn-outline-danger"><i style="font-size: 30px;" class="fa">&#xf014;</i></button>
+                                    </form>
                                     <h5 class="card-title">@house.Name</h5>
                                     <p class="card-text text-primary">@Enum.GetName(typeof(HouseType), house.Type + 1)</p>
                                     <p class="card-text text-success">@house.Price KZT</p>

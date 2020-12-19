@@ -11,6 +11,6 @@ namespace Housing.Core.DTOs
         public double Balance { get; set; }
         public long UserId { get; set; }
         public CitizenUser User { get; set; }
-        public ICollection<HouseDto> Houses { get; set; }
+        public List<HouseDto> Houses { get; set; }
     }
 }

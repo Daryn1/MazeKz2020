@@ -1,5 +1,5 @@
 ﻿@model HouseDto
-<form class="container-fluid" method="post" asp-controller="Housing" asp-action="AddHouse">
+<form class="container-fluid" enctype="multipart/form-data" method="post" asp-controller="Housing" asp-action="AddHouse">
     <div class="form-group badge badge-danger">@ViewBag.ErrorMessage</div>
     <h1 class="form-group display-4" style="text-align: center;">Добавление недвижимости</h1>
     <div class="form-group">
@@ -12,7 +12,7 @@
     </div>
     <div class="form-group">
         <label for="houseType">Тип недвижимости</label>
-        <select asp-for="@Model.Type" asp-items="@new SelectList(Enum.GetNames(typeof(HouseType)))" multiple class="form-control" id="houseType">
+        <select asp-for="@Model.Type" asp-items="@new SelectList(Enum.GetNames(typeof(HouseType)))" class="form-control" id="houseType">
         </select>
     </div>
     <div class="form-group">
@@ -22,6 +22,10 @@
     <div class="form-group">
         <label for="houseName">Цена за недвижимость</label>
         <input asp-for="@Model.Price" type="number" min="0" class="form-control" id="housePrice">
+    </div>
+    <div class="form-group">
+        <label for="houseFile">Картинка</label>
+        <input asp-for="@Model.ImageFile" type="file" class="form-control" id="houseFile">
     </div>
     <div class="form-group" style="text-align: right;">
         <button type="submit" class="btn btn-lg btn-primary">Опубликовать</button>

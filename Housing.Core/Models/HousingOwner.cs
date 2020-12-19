@@ -11,6 +11,7 @@ namespace Housing.Core.Models
         public double Balance { get; set; }
         public long UserId { get; set; }
         public CitizenUser User { get; set; }
-        public ICollection<House> Houses { get; set; }
+        public HousingResident HousingUser { get; set; }
+        public List<House> Houses { get; set; }
     }
 }

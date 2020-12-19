@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Housing.Core.Enums;
 using Housing.Core.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace Housing.Core.DTOs
 {
@@ -18,9 +19,12 @@ namespace Housing.Core.DTOs
         public bool IsBought { get; set; }
         [Required]
         public double Price { get; set; }
+        public IFormFile ImageFile { get; set; }
+        public string ImagePath { get; set; }
         public HouseType Type { get; set; }
-        public ICollection<HousingUserDto> HouseResidents { get; set; }
+        public List<HousingResidentDto> HouseResidents { get; set; }
         public long OwnerId { get; set; }
         public HousingOwnerDto Owner { get; set; }
+        public List<CommentDto> Comments { get; set; }
     }
 }

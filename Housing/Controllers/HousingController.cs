@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -7,8 +8,10 @@ using Housing.Core.DTOs;
 using Housing.Core.Enums;
 using Housing.Core.Interfaces.Repositories;
 using Housing.Core.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace Housing.Controllers
 {
@@ -17,10 +20,12 @@ namespace Housing.Controllers
     {
         private readonly IHouseRepository _repos;
         private readonly IMapper _mapper;
-        public HousingController(IHouseRepository repos, IMapper mapper)
+        private IWebHostEnvironment _environment;
+        public HousingController(IHouseRepository repos, IMapper mapper, IWebHostEnvironment environment)
         {
             _repos = repos;
             _mapper = mapper;
+            _environment = environment;
         }
         public IActionResult AddHouse()
         {
@@ -44,18 +49,25 @@ namespace Housing.Controllers
             if (!ModelState.IsValid)
             {
                 error = "Заполните все поля";
-                return Redirect("/profile?houseCreateErrorMessage=" + error);
+                return RedirectToAction("ProfilePage", "Profile", new { error });
             }
             if(house.Type == HouseType.Ничего)
             {
                 error = "Выберите тип недвижимости";
-                return Redirect("/profile?houseCreateErrorMessage=" + error);
+                return RedirectToAction("ProfilePage", "Profile", new { error });
+            }
+            string houseImagePath = "/HouseImages/" + house.ImageFile.FileName;
+            house.ImagePath = houseImagePath;
+            using (var stream = new FileStream(_environment.WebRootPath + houseImagePath, FileMode.Create))
+            {
+               await house.ImageFile.CopyToAsync(stream);
             }
             var houseModel = _mapper.Map<House>(house);
+            houseModel.IsBought = true;
             houseModel.OwnerId = long.Parse(HttpContext.Session.GetString("Id"));
-            if (await _repos.Create(houseModel) != null) return Redirect("/profile");
+            if (await _repos.Create(houseModel) != null) return RedirectToAction("ProfilePage", "Profile");
             error = "Не удалось опубликовать недвижимость";
-            return Redirect("/profile?houseCreateErrorMessage=" + error);
+            return RedirectToAction("ProfilePage", "Profile", new { error });
         }
         public async Task<IActionResult> Houses(string errorMessage, FilteredHouseDto house)
         {
@@ -136,6 +148,32 @@ namespace Housing.Controllers
                 if (await _repos.Update(house)) return Redirect("/Housing/Houses/id=" + id);
             }
             return RedirectToAction("HousePage", "Housing", new { id, errorMessage = "Не удалось обновить стоимость" });
+        }
+
+        [HttpPost("/Housing/Houses/id={id}/update/image")]
+        public async Task<IActionResult> UpdateHouseImageAsync(IFormFile houseFile, long id)
+        {
+            if(houseFile != null)
+            {
+                var house = await _repos.GetById(id);
+                var newHouseImagePath = "/HouseImages/" + houseFile.FileName;
+                System.IO.File.Delete(_environment.WebRootPath + house.ImagePath);
+                using(var stream = new FileStream(_environment.WebRootPath + newHouseImagePath, FileMode.Create))
+                {
+                    houseFile.CopyToAsync(stream);
+                }
+                house.ImagePath = newHouseImagePath;
+                if(await _repos.Update(house)) return Redirect("/Housing/Houses/id=" + id);
+            }
+            return RedirectToAction("HousePage", "Housing", new { id, errorMessage = "Не удалось обновить стоимость" });
+        }
+
+        [HttpPost("/Housing/Houses/id={id}/delete")]
+        public async Task<IActionResult> DeleteHouseAsync(long id)
+        {
+            if (await _repos.DeleteById(id)) return RedirectToAction("ProfilePage", "Profile");
+            string deleteError = "Не удалось удалить недвижимость";
+            return RedirectToAction("ProfilePage", "Profile", new { deleteError });
         }
     }
 }

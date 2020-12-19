@@ -15,8 +15,8 @@ namespace Housing.Core.Helpers
             CreateMap<HouseDto, House>();
             CreateMap<Comment, CommentDto>();
             CreateMap<CommentDto, Comment>();
-            CreateMap<HousingUser, HousingUserDto>();
-            CreateMap<HousingUserDto, HousingUser>();
+            CreateMap<HousingResident, HousingResidentDto>();
+            CreateMap<HousingResidentDto, HousingResident>();
             CreateMap<HousingOwner, HousingOwnerDto>();
             CreateMap<HousingOwnerDto, HousingOwner>();
         }

@@ -1,4 +1,6 @@
-﻿using Housing.Core.Interfaces.Repositories;
+﻿using AutoMapper;
+using Housing.Core.Helpers;
+using Housing.Core.Interfaces.Repositories;
 using Housing.Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,9 +16,16 @@ namespace Housing.Extensions
         {
             services.AddScoped<IHouseRepository, HouseRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
-            services.AddScoped<IHousingUserRepository, HousingUserRepository>();
+            services.AddScoped<IHousingResidentRepository, HousingResidentRepository>();
             services.AddScoped<IHousingOwnerRepository, HousingOwnerRepository>();
             services.AddScoped<ICitizenUserRepository, CitizenUserRepository>();
+        }
+
+        public static void RegisterAutoMapper(this IServiceCollection services)
+        {
+            var mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new MapperProfiles()));
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
     }
 }

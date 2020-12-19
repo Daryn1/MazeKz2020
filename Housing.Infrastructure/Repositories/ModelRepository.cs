@@ -50,7 +50,7 @@ namespace Housing.Infrastructure.Repositories
 
         public virtual async Task<ICollection<D>> GetAll()
         {
-           return await Context.Set<T>().AsNoTracking().Select(m => Mapper.Map<D>(m)).ToListAsync();
+           return await Context.Set<T>().Select(m => Mapper.Map<D>(m)).ToListAsync();
         }
 
         public virtual async Task<bool> HasEntity(T model)

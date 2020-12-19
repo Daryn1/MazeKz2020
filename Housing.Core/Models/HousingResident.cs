@@ -5,14 +5,13 @@ using WebMaze.DbStuff.Model;
 
 namespace Housing.Core.Models
 {
-    public class HousingUser
+    public class HousingResident
     {
         public long Id { get; set; }
-        public double Balance { get; set; }
-        public long UserId { get; set; }
-        public CitizenUser User { get; set; }
-        public long HouseId { get; set; }
+        public long OwnerId { get; set; }
+        public HousingOwner Owner { get; set; }
+        public long? HouseId { get; set; }
         public House House { get; set; }
-        
+        public List<Comment> Comments { get; set; }
     }
 }

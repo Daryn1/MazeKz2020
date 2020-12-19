@@ -1,49 +1,49 @@
 ﻿@inject IHttpContextAccessor HttpContextAccessor
-@{ 
+@{
     string updateUrl = HttpContextAccessor.HttpContext.Request.Path.Value + "/update/";
-<h3 class="text-danger">@ViewBag.UpdateHouseErrorMessage</h3>
-<form class="updatehouse-form" method="post" action="@string.Concat(updateUrl, "name")">
-       <div class="row">
-           <button type="button" class="btn btn-success d-block col-md-3 updateHouseNameBtn">Обновить название</button>
-           <div class="updateHouseName updatehouse col-md-9 row">
-               <div class="form-row col-md-8">
-                   <input type="text" class="form-control" name="houseName" />
-               </div>
-               <div class="col-md-1"></div>
-               <button type="submit" class="btn d-block col-md-3 btn-warning">Отправить</button>
-           </div>
-       </div>
-</form>
-   <form class="updatehouse-form" method="post" action="@string.Concat(updateUrl, "street")">
-       <div class="row">
-           <button type="button" class="btn btn-success d-block col-md-3 updateHouseStreetBtn">Обновить улицу</button>
-           <div class="updateHouseStreet updatehouse col-md-9 row">
-               <div class="form-row col-md-8">
-                   <input type="text" class="form-control" name="houseStreet" />
-               </div>
-               <div class="col-md-1"></div>
-               <button type="submit" class="btn d-block col-md-3 btn-warning">Отправить</button>
-           </div>
-       </div>
-   </form>
-   <form class="updatehouse-form" method="post" action="@string.Concat(updateUrl, "info")">
-       <div class="row">
-           <button type="button" class="btn btn-success d-block col-md-3 updateHouseInfoBtn">Обновить информацию</button>
-           <div class="updateHouseInfo updatehouse col-md-9 row">
-               <div class="form-row col-md-8">
-                   <textarea class="form-control" name="houseInfo" rows="3"></textarea>
-               </div>
-               <div class="col-md-1"></div>
-               <button type="submit" class="btn d-block col-md-3 btn-warning">Отправить</button>
-           </div>
-       </div>
-   </form>
+    <h3 class="text-danger">@ViewBag.UpdateHouseErrorMessage</h3>
+    <form class="updatehouse-form" method="post" action="@string.Concat(updateUrl, "name")">
+        <div class="row">
+            <button type="button" class="btn btn-success d-block col-md-3 updateHouseNameBtn">Обновить название</button>
+            <div class="updateHouseName updatehouse col-md-9 row">
+                <div class="form-row col-md-8">
+                    <input type="text" class="form-control" name="houseName" />
+                </div>
+                <div class="col-md-1"></div>
+                <button type="submit" class="btn d-block col-md-3 btn-warning">Отправить</button>
+            </div>
+        </div>
+    </form>
+    <form class="updatehouse-form" method="post" action="@string.Concat(updateUrl, "street")">
+        <div class="row">
+            <button type="button" class="btn btn-success d-block col-md-3 updateHouseStreetBtn">Обновить улицу</button>
+            <div class="updateHouseStreet updatehouse col-md-9 row">
+                <div class="form-row col-md-8">
+                    <input type="text" class="form-control" name="houseStreet" />
+                </div>
+                <div class="col-md-1"></div>
+                <button type="submit" class="btn d-block col-md-3 btn-warning">Отправить</button>
+            </div>
+        </div>
+    </form>
+    <form class="updatehouse-form" method="post" action="@string.Concat(updateUrl, "info")">
+        <div class="row">
+            <button type="button" class="btn btn-success d-block col-md-3 updateHouseInfoBtn">Обновить информацию</button>
+            <div class="updateHouseInfo updatehouse col-md-9 row">
+                <div class="form-row col-md-8">
+                    <textarea class="form-control" name="houseInfo" rows="3"></textarea>
+                </div>
+                <div class="col-md-1"></div>
+                <button type="submit" class="btn d-block col-md-3 btn-warning">Отправить</button>
+            </div>
+        </div>
+    </form>
     <form class="updatehouse-form" method="post" action="@string.Concat(updateUrl, "price")">
         <div class="row">
             <button type="button" class="btn btn-success d-block col-md-3 updateHousePriceBtn">Обновить стоимость</button>
             <div class="updateHousePrice updatehouse col-md-9 row">
                 <div class="form-row col-md-8">
-                    <input type="number" class="form-control" name="housePrice"/>
+                    <input type="number" class="form-control" name="housePrice" />
                 </div>
                 <div class="col-md-1"></div>
                 <button type="submit" class="btn d-block col-md-3 btn-warning">Отправить</button>
@@ -56,6 +56,18 @@
             <div class="updateHouseType updatehouse col-md-9 row">
                 <div class="form-row col-md-8">
                     <select asp-items="@new SelectList(Enum.GetNames(typeof(HouseType)))" name="houseType" class="form-control"></select>
+                </div>
+                <div class="col-md-1"></div>
+                <button type="submit" class="btn d-block col-md-3 btn-warning">Отправить</button>
+            </div>
+        </div>
+    </form>
+    <form class="updatehouse-form" enctype="multipart/form-data" method="post" action="@string.Concat(updateUrl, "image")">
+        <div class="row">
+            <button type="button" class="btn btn-success d-block col-md-3 updateHouseImageBtn">Обновить фотографию недвижимости</button>
+            <div class="updateHouseImage updatehouse col-md-9 row">
+                <div class="form-row col-md-8">
+                    <input type="file" class="form-control" name="houseFile"/>
                 </div>
                 <div class="col-md-1"></div>
                 <button type="submit" class="btn d-block col-md-3 btn-warning">Отправить</button>

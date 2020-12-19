@@ -4,14 +4,16 @@ using Housing.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Housing.Infrastructure.Migrations
 {
     [DbContext(typeof(ModelContext))]
-    partial class ModelContextModelSnapshot : ModelSnapshot
+    [Migration("20201218064750_AddImagePathForHouse")]
+    partial class AddImagePathForHouse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,7 +28,7 @@ namespace Housing.Infrastructure.Migrations
                         .HasColumnType("bigint")
                         .UseIdentityColumn();
 
-                    b.Property<long>("HouseId")
+                    b.Property<long>("HousingUserId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("LeavedAt")
@@ -35,14 +37,9 @@ namespace Housing.Infrastructure.Migrations
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("CommentId");
 
-                    b.HasIndex("HouseId");
-
-                    b.HasIndex("UserId");
+                    b.HasIndex("HousingUserId");
 
                     b.ToTable("HouseAdvertisementComments");
                 });
@@ -112,18 +109,20 @@ namespace Housing.Infrastructure.Migrations
                         .HasColumnType("bigint")
                         .UseIdentityColumn();
 
-                    b.Property<long?>("HouseId")
+                    b.Property<double>("Balance")
+                        .HasColumnType("float");
+
+                    b.Property<long>("HouseId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("OwnerId")
+                    b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("HouseId");
 
-                    b.HasIndex("OwnerId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("HouseResidents");
                 });
@@ -151,21 +150,13 @@ namespace Housing.Infrastructure.Migrations
 
             modelBuilder.Entity("Housing.Core.Models.Comment", b =>
                 {
-                    b.HasOne("Housing.Core.Models.House", "House")
-                        .WithMany("Comments")
-                        .HasForeignKey("HouseId")
+                    b.HasOne("Housing.Core.Models.HousingUser", "HousingUser")
+                        .WithMany()
+                        .HasForeignKey("HousingUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Housing.Core.Models.HousingUser", "User")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("House");
-
-                    b.Navigation("User");
+                    b.Navigation("HousingUser");
                 });
 
             modelBuilder.Entity("Housing.Core.Models.House", b =>
@@ -194,36 +185,28 @@ namespace Housing.Infrastructure.Migrations
                 {
                     b.HasOne("Housing.Core.Models.House", "House")
                         .WithMany("HousingUsers")
-                        .HasForeignKey("HouseId");
+                        .HasForeignKey("HouseId")
+                        .IsRequired();
 
-                    b.HasOne("Housing.Core.Models.HousingOwner", "Owner")
-                        .WithOne("HousingUser")
-                        .HasForeignKey("Housing.Core.Models.HousingUser", "OwnerId")
+                    b.HasOne("WebMaze.DbStuff.Model.CitizenUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("House");
 
-                    b.Navigation("Owner");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Housing.Core.Models.House", b =>
                 {
-                    b.Navigation("Comments");
-
                     b.Navigation("HousingUsers");
                 });
 
             modelBuilder.Entity("Housing.Core.Models.HousingOwner", b =>
                 {
                     b.Navigation("Houses");
-
-                    b.Navigation("HousingUser");
-                });
-
-            modelBuilder.Entity("Housing.Core.Models.HousingUser", b =>
-                {
-                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

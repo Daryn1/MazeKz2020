@@ -35,8 +35,9 @@
     else
     {
         <div class="profile-sidebar">
-            <div class="profile-userpic">
-                <img src="http://keenthemes.com/preview/metronic/theme/assets/admin/pages/media/profile/profile_user.jpg" class="img-responsive" alt="">
+            <div class="profile-userpic" style="text-align: center; max-width: 50% !important; position: relative; left: 25%;">
+                <img src="https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png"
+                     class="img-responsive" alt="">
             </div>
             <div class="profile-usertitle">
                 <div class="profile-usertitle-name">
@@ -44,7 +45,7 @@
                 </div>
             </div>
             <div class="profile-userbuttons">
-                <a class="btn btn-success btn-sm" href="/profile">Мой профиль</a>
+                <a class="btn btn-success btn-sm" asp-controller="Profile" asp-action="ProfilePage">Мой профиль</a>
             </div>
         </div>
     }

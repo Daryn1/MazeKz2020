@@ -1,83 +1,56 @@
-﻿@{
+﻿@model HouseDto
+@{
     Layout = "_Layout";
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = Model.Name;
+    var houseComments = new HouseComments
+    {
+        HouseId = Model.HouseId,
+        House = Model,
+        Comments = Model.Comments
+    };
 }
-@inject IHttpContextAccessor HttpContextAccessor 
-@model HouseDto
-        <div class="house-block container-fluid">
-            <div class="card house">
-                <img class="card-img-top img-fluid" src="https://www.pufikhomes.com/wp-content/uploads/2019/12/idealnyi-dom-2019-po-versii-house-beautiful-pufikhomes-1a.jpg" alt="Card image">
-                <div class="card-body">
-                    @if(HttpContextAccessor.HttpContext.Session.GetString("Role") == "owner")
-                    {
-                        @await Html.PartialAsync("UpdateHouseForm")
-                    }
-                    <h1 class="card-title display-4">@Model.Name</h1>
-                    <p class="card-text lead">
-                        @Model.Info
-                    </p>
+@inject IHttpContextAccessor HttpContextAccessor
+<div class="house-block container-fluid">
+    <div class="card house">
+        <img class="card-img-top img-fluid" src="@Model.ImagePath" alt="Card image">
+        <div class="card-body">
+            @if (HttpContextAccessor.HttpContext.Session.GetString("Id") == Model.Owner.Id.ToString())
+            {
+                @await Html.PartialAsync("UpdateHouseForm")
+            }
+            <h1 class="card-title display-4">@Model.Name</h1>
+            <p class="card-text lead">
+                @Model.Info
+            </p>
 
 
-                    <div class="list-group house-info">
-                        <p href="#" class="list-group-item list-group-item-action">
-                            Название: @Model.Name
-                        </p>
-                        <p class="list-group-item list-group-item-action">Тип: <span class="badge badge-primary">@Enum.GetName(typeof(HouseType), (Model.Type + 1))</span></p>
-                        <p class="list-group-item list-group-item-action">Улица: <span class="badge badge-warning">@Model.Street</span></p>
-                        <p class="list-group-item list-group-item-action">Количество жителей: <span class="badge badge-info">0</span></p>
-                        <p class="list-group-item list-group-item-action">Стоимость: <span class="badge badge-success">@Model.Price KZT</span></p>
+            <div class="list-group house-info">
+                <p href="#" class="list-group-item list-group-item-action">
+                    Название: @Model.Name
+                </p>
+                <p class="list-group-item list-group-item-action">Тип: <span class="badge badge-primary">@Enum.GetName(typeof(HouseType), (Model.Type))</span></p>
+                <p class="list-group-item list-group-item-action">Улица: <span class="badge badge-warning">@Model.Street</span></p>
+                <p class="list-group-item list-group-item-action">Количество жителей: <span class="badge badge-info">0</span></p>
+                <p class="list-group-item list-group-item-action">Стоимость: <span class="badge badge-success">@Model.Price KZT</span></p>
+            </div>
+
+            <div class="house-seller">
+                <div class="card">
+                    <div class="card-header">
+                        Продавец дома
                     </div>
-
-                    <div class="house-seller">
-                        <div class="card">
-                            <div class="card-header">
-                                Продавец дома
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">@Model.Owner.User.Login</h5>
-                                <p class="card-text">Электронная почта: <span class="badge badge-primary">ramzes666@gmail.com</span></p>
-                                <p class="card-text">Мобильный номер: <span class="badge badge-success">+7 (705)-115-23-66</span>.</p>
-                                <a href="#" class="btn d-inline btn-info">Связаться</a>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="comments">
-                        <div class="comments-list">
-                            <div class="media row">
-                                <div class="col-md-2">
-                                    <p class="pull-right"><small>5 days ago</small></p>
-                                    <a class="media-left" href="#">
-                                        <img src="http://lorempixel.com/40/40/people/1/">
-                                    </a>
-                                </div>
-                                <div class="media-body col-md-10">
-
-                                    <h4 class="media-heading user_name">Baltej Singh</h4>
-                                    <p class="comment-text">
-                                        Рандомный коммент
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="media row">
-                                <div class="col-md-2">
-                                    <p class="pull-right"><small>5 days ago</small></p>
-                                    <a class="media-left" href="#">
-                                        <img src="http://lorempixel.com/40/40/people/2/">
-                                    </a>
-                                </div>
-                                <div class="media-body col-md-10">
-
-                                    <h4 class="media-heading user_name">Baltej Singh</h4>
-                                    <p class="comment-text">
-                                        Рандомный коммент номер 2
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.Owner.User.Login</h5>
+                        <p class="card-text">Электронная почта: <span class="badge badge-primary">ramzes666@gmail.com</span></p>
+                        <p class="card-text">Мобильный номер: <span class="badge badge-success">+7 (705)-115-23-66</span>.</p>
+                        <a href="#" class="btn d-inline btn-info">Связаться</a>
                     </div>
                 </div>
             </div>
+
+
+            @await Html.PartialAsync("../Comments/HouseComments", houseComments) 
         </div>
+    </div>
+</div>
 

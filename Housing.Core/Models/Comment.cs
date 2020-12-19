@@ -10,7 +10,9 @@ namespace Housing.Core.Models
         public long CommentId { get; set; }
         public DateTime LeavedAt { get; set; }
         public string Text { get; set; }
-        public long HousingUserId { get; set; }
-        public HousingUser HousingUser { get; set; }
+        public long HouseId { get; set; }
+        public House House { get; set; }
+        public long UserId { get; set; }
+        public HousingResident User { get; set; }
     }
 }

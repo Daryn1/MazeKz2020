@@ -14,8 +14,8 @@ namespace Housing.Controllers
     [Controller]
     public class HousingOwnersController : Controller
     {
-        private IHousingOwnerRepository _owners;
-        private ICitizenUserRepository _users;
+        private readonly IHousingOwnerRepository _owners;
+        private readonly ICitizenUserRepository _users;
         public HousingOwnersController(ICitizenUserRepository users, IHousingOwnerRepository owners)
         {
             _users = users;
