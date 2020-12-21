@@ -13,5 +13,7 @@ namespace Housing.Core.Models
         public CitizenUser User { get; set; }
         public HousingResident HousingUser { get; set; }
         public List<House> Houses { get; set; }
+        public List<CartHouse> CartHouses { get; set; }
+        public List<HousingOwnerRequest> OwnerRequests { get; set; }
     }
 }

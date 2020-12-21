@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.ComponentModel;
 
 namespace Housing.Core.Enums
 {
@@ -13,5 +11,7 @@ namespace Housing.Core.Enums
         Небоскреб,
         Пентхаус,
         Терраса,
+        [Description("Жилой дом")]
+        Жилой_дом
     }
 }

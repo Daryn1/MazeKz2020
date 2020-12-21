@@ -11,6 +11,10 @@ namespace Housing.Infrastructure.Data
         public DbSet<HousingResident> HouseResidents { get; set; }
         public DbSet<HousingOwner> HouseOwners { get; set; }
         public DbSet<Comment> HouseAdvertisementComments { get; set; }
+        public DbSet<CartHouse> HouseCarts { get; set; }
+        public DbSet<HousingOwnerRequest> HousingOwnerRequests { get; set; }
+        public DbSet<HousingResidentRequest> HousingResidentRequests { get; set; }
+
         public ModelContext(DbContextOptions<ModelContext> options) : base(options)
         {
         }

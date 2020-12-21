@@ -19,6 +19,9 @@ namespace Housing.Core.Helpers
             CreateMap<HousingResidentDto, HousingResident>();
             CreateMap<HousingOwner, HousingOwnerDto>();
             CreateMap<HousingOwnerDto, HousingOwner>();
+            CreateMap<CartHouse, CartHouseDto>();
+            CreateMap<HousingOwnerRequest, HousingOwnerRequestDto>();
+            CreateMap<HousingResidentRequest, HousingResidentRequestDto>();
         }
     }
 }

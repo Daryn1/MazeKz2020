@@ -16,6 +16,7 @@ namespace Housing.Core.Models
         public bool IsBought { get; set; }
         public double Price { get; set; }
         public HouseType Type { get; set; }
+        public int MaxResidentsCount { get; set; }
         public List<HousingResident> HousingUsers { get; set; }
         public List<Comment> Comments { get; set; }
         public long OwnerId { get; set; }

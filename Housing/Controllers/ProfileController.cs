@@ -21,11 +21,12 @@ namespace Housing.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<IActionResult> ProfilePageAsync(string error, string deleteError, string balanceError)
+        public async Task<IActionResult> ProfilePageAsync(string error, string deleteError, string balanceError, string requestDeleteError)
         {
             ViewBag.ErrorMessage = error;
             ViewBag.DeleteHouseErrorMessage = deleteError;
             ViewBag.BalanceErrorMessage = balanceError;
+            ViewBag.RequestDeleteError = requestDeleteError;
             var owner = await _owners.GetById(long.Parse(HttpContext.Session.GetString("Id")));
             return View(_mapper.Map<HousingOwnerDto>(owner));
         }
@@ -36,7 +37,7 @@ namespace Housing.Controllers
             if(balance == 0)
                 return RedirectToAction("ProfilePage", new { balanceError = "Баланс должен быть больше нуля" });
             var owner = await _owners.GetById(id);
-            owner.Balance = balance;
+            owner.Balance += balance;
             if (await _owners.Update(owner)) return RedirectToAction("ProfilePage");
             return RedirectToAction("ProfilePage", new { balanceError = "Не удалось пополнить баланс" });
         }

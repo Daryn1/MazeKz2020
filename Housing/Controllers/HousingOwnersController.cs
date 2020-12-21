@@ -40,7 +40,6 @@ namespace Housing.Controllers
             return RedirectToAction("Houses", "Housing");
         }
 
-        [HttpPost("signout")]
         public IActionResult SignoutUser()
         {
             HttpContext.Session.Clear();

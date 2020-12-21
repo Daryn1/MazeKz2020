@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-md-2">
                 <div class="profile-img">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog"/>
+                    <img src="@Model.User.AvatarUrl"/>
                 </div>
             </div>
             <div class="col-md-10">
@@ -25,6 +25,15 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Опубликовать недвижимость</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="cart-tab" data-toggle="tab" href="#cart" role="tab" aria-controls="cart" aria-selected="false">Избранное</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="ownerRequests-tab" data-toggle="tab" href="#ownerRequests" role="tab" aria-controls="ownerRequests" aria-selected="false">Запросы на покупку</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="residentRequests-tab" data-toggle="tab" href="#residentRequests" role="tab" aria-controls="residentRequests" aria-selected="false">Запросы на жительство</a>
                         </li>
                     </ul>
                 </div>
@@ -81,15 +90,76 @@
                                 <h5 class="card-header">@count</h5>
                                 <div class="card-body">
                                     <form style="text-align: right;" method="post" action="/Housing/Houses/id=@house.HouseId/delete">
-                                    <button type="submit" class="btn btn-outline-danger"><i style="font-size: 30px;" class="fa">&#xf014;</i></button>
+                                        <button type="submit" class="btn btn-outline-danger"><i style="font-size: 30px;" class="fa">&#xf014;</i></button>
                                     </form>
                                     <h5 class="card-title">@house.Name</h5>
-                                    <p class="card-text text-primary">@Enum.GetName(typeof(HouseType), house.Type + 1)</p>
+                                    <p class="card-text text-primary">@Enum.GetName(typeof(HouseType), house.Type)</p>
                                     <p class="card-text text-success">@house.Price KZT</p>
                                     <a href="/Housing/Houses/id=@house.HouseId" class="btn btn-primary">Узнать больше</a>
                                 </div>
                             </div>
                             count++;
+                        }
+                    </div>
+                    <div class="tab-pane fade" id="cart" role="tabpanel" aria-labelledby="cart-tab">
+                        @{
+                            count = 1;
+                            foreach (var cartHouse in Model.CartHouses)
+                            {
+                                <div class="card">
+                                    <h5 class="card-header">@count</h5>
+                                    <div class="card-body">
+                                        <form style="text-align: right;" method="post" action="/CartHouse/ownerId=@cartHouse.OwnerId/houseId=@cartHouse.HouseId/delete">
+                                            <button type="submit" class="btn btn-outline-danger"><i style="font-size: 30px;" class="fa">&#xf014;</i></button>
+                                        </form>
+                                        <h5 class="card-title">@cartHouse.House.Name</h5>
+                                        <p class="card-text text-primary">@Enum.GetName(typeof(HouseType), cartHouse.House.Type)</p>
+                                        <p class="card-text text-success">@cartHouse.House.Price KZT</p>
+                                        <a href="/Housing/Houses/id=@cartHouse.HouseId" class="btn btn-primary">Узнать больше</a>
+                                    </div>
+                                </div>
+                                count++;
+                            }
+                        }
+                    </div>
+                    <div class="tab-pane fade" id="ownerRequests" role="tabpanel" aria-labelledby="ownerRequests-tab">
+                        <h3 class="text-danger">@ViewBag.RequestDeleteError</h3>
+                        @{
+                            count = 1;
+                            foreach (var request in Model.OwnerRequests)
+                            {
+                                <div class="card">
+                                    <h5 class="card-header">@count</h5>
+                                    <div class="card-body">
+                                        <form style="text-align: right;" method="post" action="/HousingOwnerRequests/ownerId=@Model.Id/houseId=@request.HouseId/deletefromaction">
+                                            <button type="submit" class="btn btn-outline-danger"><i style="font-size: 30px;" class="fa">&#xf014;</i></button>
+                                        </form>
+                                        <h5 class="card-title">@request.House.Name</h5>
+                                        <p class="lead">@request.ExtraInfo</p>
+                                    </div>
+                                </div>
+                                count++;
+                            }
+                        }
+                    </div>
+                    <div class="tab-pane fade" id="residentRequests" role="tabpanel" aria-labelledby="residentRequests-tab">
+                        <h3 class="text-danger">@ViewBag.RequestDeleteError</h3>
+                        @{
+                            count = 1;
+                            foreach (var request in Model.HousingUser.ResidentRequests)
+                            {
+                                <div class="card">
+                                    <h5 class="card-header">@count</h5>
+                                    <div class="card-body">
+                                        <form style="text-align: right;" method="post" action="/HousingResidentRequests/residentId=@Model.Id/houseId=@request.HouseId/deletefromaction">
+                                            <button type="submit" class="btn btn-outline-danger"><i style="font-size: 30px;" class="fa">&#xf014;</i></button>
+                                        </form>
+                                        <h5 class="card-title">@request.House.Name</h5>
+                                        <p class="lead">@request.ExtraInfo</p>
+                                    </div>
+                                </div>
+                                count++;
+                            }
                         }
                     </div>
                 </div>

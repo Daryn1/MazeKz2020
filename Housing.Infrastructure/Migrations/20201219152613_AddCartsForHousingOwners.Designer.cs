@@ -4,14 +4,16 @@ using Housing.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Housing.Infrastructure.Migrations
 {
     [DbContext(typeof(ModelContext))]
-    partial class ModelContextModelSnapshot : ModelSnapshot
+    [Migration("20201219152613_AddCartsForHousingOwners")]
+    partial class AddCartsForHousingOwners
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,9 +87,6 @@ namespace Housing.Infrastructure.Migrations
                     b.Property<bool>("IsBought")
                         .HasColumnType("bit");
 
-                    b.Property<int>("MaxResidentsCount")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -130,34 +129,6 @@ namespace Housing.Infrastructure.Migrations
                     b.ToTable("HouseOwners");
                 });
 
-            modelBuilder.Entity("Housing.Core.Models.HousingOwnerRequest", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("ExtraInfo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("HouseId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("OwnerId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("SentAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HouseId");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("HousingOwnerRequests");
-                });
-
             modelBuilder.Entity("Housing.Core.Models.HousingResident", b =>
                 {
                     b.Property<long>("Id")
@@ -179,34 +150,6 @@ namespace Housing.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("HouseResidents");
-                });
-
-            modelBuilder.Entity("Housing.Core.Models.HousingResidentRequest", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("ExtraInfo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("HouseId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ResidentId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("SentAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HouseId");
-
-                    b.HasIndex("ResidentId");
-
-                    b.ToTable("HousingResidentRequests");
                 });
 
             modelBuilder.Entity("WebMaze.DbStuff.Model.CitizenUser", b =>
@@ -239,7 +182,7 @@ namespace Housing.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Housing.Core.Models.HousingOwner", "Owner")
-                        .WithMany("CartHouses")
+                        .WithMany()
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -290,25 +233,6 @@ namespace Housing.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Housing.Core.Models.HousingOwnerRequest", b =>
-                {
-                    b.HasOne("Housing.Core.Models.House", "House")
-                        .WithMany()
-                        .HasForeignKey("HouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Housing.Core.Models.HousingOwner", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("House");
-
-                    b.Navigation("Owner");
-                });
-
             modelBuilder.Entity("Housing.Core.Models.HousingResident", b =>
                 {
                     b.HasOne("Housing.Core.Models.House", "House")
@@ -326,25 +250,6 @@ namespace Housing.Infrastructure.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("Housing.Core.Models.HousingResidentRequest", b =>
-                {
-                    b.HasOne("Housing.Core.Models.House", "House")
-                        .WithMany()
-                        .HasForeignKey("HouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Housing.Core.Models.HousingResident", "Resident")
-                        .WithMany()
-                        .HasForeignKey("ResidentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("House");
-
-                    b.Navigation("Resident");
-                });
-
             modelBuilder.Entity("Housing.Core.Models.House", b =>
                 {
                     b.Navigation("Comments");
@@ -354,8 +259,6 @@ namespace Housing.Infrastructure.Migrations
 
             modelBuilder.Entity("Housing.Core.Models.HousingOwner", b =>
                 {
-                    b.Navigation("CartHouses");
-
                     b.Navigation("Houses");
 
                     b.Navigation("HousingUser");

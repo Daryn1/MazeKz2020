@@ -1,4 +1,5 @@
 ﻿@model HouseDto
+@inject IHttpContextAccessor HttpContextAccessor
 @{
     Layout = "_Layout";
     ViewData["Title"] = Model.Name;
@@ -8,8 +9,23 @@
         House = Model,
         Comments = Model.Comments
     };
+    var ownerId = HttpContextAccessor.HttpContext.Session.GetString("Id");
 }
-@inject IHttpContextAccessor HttpContextAccessor
+<script>
+        let houseId = '@Model.HouseId';
+    let ownerId = '@ownerId';
+    if (ownerId !== null || ownerId !== '') {
+        if (ownerId !== '@Model.OwnerId') {
+            checkCartHouse(ownerId, houseId);
+            appendOwnerRequestForms(ownerId, houseId);
+            appendResidentRequestForms(ownerId, houseId);
+        } else {
+            loadOwnerRequests(houseId);
+            loadResidentRequests(houseId);
+        }
+    }
+</script>
+
 <div class="house-block container-fluid">
     <div class="card house">
         <img class="card-img-top img-fluid" src="@Model.ImagePath" alt="Card image">
@@ -18,6 +34,28 @@
             {
                 @await Html.PartialAsync("UpdateHouseForm")
             }
+            <span class="badge badge-danger">@ViewBag.CartError</span>
+            <span class="carthouse"></span>
+            <div class="houseRequests" style="margin-top: 20px;">
+                <span class="badge badge-danger houseRequestError"></span>
+                @if (ownerId == Model.OwnerId.ToString())
+                {
+                <div class="row">
+                    <div class="dropdown col-md-3">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="ownersRequestsButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Заявки на покупку</button>
+                        <div class="dropdown-menu ownersRequests" aria-labelledby="ownersRequestsButton">
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                    <div class="dropdown col-md-3">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="residentsRequestsButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Заявки на жительство</button>
+                        <div class="dropdown-menu residentsRequests" aria-labelledby="residentsRequestsButton">
+                        </div>
+                    </div>
+                </div>
+                    
+                }
+            </div>
             <h1 class="card-title display-4">@Model.Name</h1>
             <p class="card-text lead">
                 @Model.Info
@@ -37,7 +75,7 @@
             <div class="house-seller">
                 <div class="card">
                     <div class="card-header">
-                        Продавец дома
+                        Владелец дома
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">@Model.Owner.User.Login</h5>
@@ -49,7 +87,7 @@
             </div>
 
 
-            @await Html.PartialAsync("../Comments/HouseComments", houseComments) 
+            @await Html.PartialAsync("../Comments/HouseComments", houseComments)
         </div>
     </div>
 </div>

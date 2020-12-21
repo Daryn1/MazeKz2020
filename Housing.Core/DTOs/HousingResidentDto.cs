@@ -13,5 +13,6 @@ namespace Housing.Core.DTOs
         public long? HouseId { get; set; }
         public HouseDto House { get; set; }
         public List<CommentDto> Comments { get; set; }
+        public List<HousingResidentRequestDto> ResidentRequests { get; set; }
     }
 }

@@ -31,7 +31,9 @@ namespace Housing.Infrastructure.Repositories
             return await Context.HouseOwners.AsNoTracking().
                 Include(o => o.User).
                 Include(o => o.Houses).
-                Include(o => o.HousingUser).
+                Include(o => o.HousingUser).ThenInclude(u => u.ResidentRequests).ThenInclude(r => r.House).
+                Include(o => o.CartHouses).ThenInclude(c => c.House).
+                Include(o => o.OwnerRequests).ThenInclude(r => r.House).
                 FirstOrDefaultAsync(o => o.Id == id);
         }
 

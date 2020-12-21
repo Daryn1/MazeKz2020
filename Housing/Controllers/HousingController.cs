@@ -83,10 +83,11 @@ namespace Housing.Controllers
             return View();
         }
         [Route("/Housing/Houses/id={id}")]
-        public async Task<IActionResult> HousePage(long id, string errorMessage)
+        public async Task<IActionResult> HousePage(long id, string errorMessage, string cartError)
         {
            var house = await _repos.GetById(id);
             ViewBag.UpdateHouseErrorMessage = errorMessage;
+            ViewBag.CartError = cartError;
             return View(_mapper.Map<HouseDto>(house));
         }
 
