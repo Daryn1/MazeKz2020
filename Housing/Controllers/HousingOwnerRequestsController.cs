@@ -67,5 +67,11 @@ namespace Housing.Controllers
             if (await _ownerRequests.DeleteRequest(request)) return RedirectToAction("ProfilePage", "Profile");
             return RedirectToAction("ProfilePage", "Profile", new { requestDeleteError = "Не удалось удалить запрос" });
         }
+        [HttpPost("ownerId={ownerId}/houseId={houseId}/apply")]
+        public async Task<IActionResult> ApplyOwnerRequest(long ownerId, long houseId)
+        {
+            if (await _ownerRequests.ApplyRequest(ownerId, houseId)) return Redirect("/Housing/Houses/id=" + houseId);
+            return Redirect("/Housing/Houses/id=" + houseId + "?requestError=Не удалось одобрить запрос");
+        }
     }
 }

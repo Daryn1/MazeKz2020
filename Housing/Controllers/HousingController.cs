@@ -63,7 +63,6 @@ namespace Housing.Controllers
                await house.ImageFile.CopyToAsync(stream);
             }
             var houseModel = _mapper.Map<House>(house);
-            houseModel.IsBought = true;
             houseModel.OwnerId = long.Parse(HttpContext.Session.GetString("Id"));
             if (await _repos.Create(houseModel) != null) return RedirectToAction("ProfilePage", "Profile");
             error = "Не удалось опубликовать недвижимость";
@@ -83,11 +82,12 @@ namespace Housing.Controllers
             return View();
         }
         [Route("/Housing/Houses/id={id}")]
-        public async Task<IActionResult> HousePage(long id, string errorMessage, string cartError)
+        public async Task<IActionResult> HousePage(long id, string errorMessage, string cartError, string requestError)
         {
            var house = await _repos.GetById(id);
             ViewBag.UpdateHouseErrorMessage = errorMessage;
             ViewBag.CartError = cartError;
+            ViewBag.RequestError = requestError;
             return View(_mapper.Map<HouseDto>(house));
         }
 
@@ -161,12 +161,24 @@ namespace Housing.Controllers
                 System.IO.File.Delete(_environment.WebRootPath + house.ImagePath);
                 using(var stream = new FileStream(_environment.WebRootPath + newHouseImagePath, FileMode.Create))
                 {
-                    houseFile.CopyToAsync(stream);
+                    await houseFile.CopyToAsync(stream);
                 }
                 house.ImagePath = newHouseImagePath;
                 if(await _repos.Update(house)) return Redirect("/Housing/Houses/id=" + id);
             }
             return RedirectToAction("HousePage", "Housing", new { id, errorMessage = "Не удалось обновить стоимость" });
+        }
+
+        [HttpPost("/Housing/Houses/id={houseId}/ownerId={ownerId}/status={isSelling}")]
+        public async Task<IActionResult> SetHouseStatus(long ownerId, long houseId, bool isSelling)
+        {
+            var house = await _repos.GetById(houseId);
+            if(house.OwnerId == ownerId)
+            {
+                house.IsSelling = isSelling;
+                if (await _repos.Update(house)) return RedirectToAction("ProfilePage", "Profile");
+            }
+            return RedirectToAction("ProfilePage", "Profile", new { statusError = "Не удалось сменить статус" });
         }
 
         [HttpPost("/Housing/Houses/id={id}/delete")]

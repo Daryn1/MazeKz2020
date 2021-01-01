@@ -92,6 +92,23 @@
                                     <form style="text-align: right;" method="post" action="/Housing/Houses/id=@house.HouseId/delete">
                                         <button type="submit" class="btn btn-outline-danger"><i style="font-size: 30px;" class="fa">&#xf014;</i></button>
                                     </form>
+                                    @{ if (house.IsSelling)
+                                        {
+                                            <div class="row">
+                                                <p class="text-success d-block col-md-3">Выставлен на продажу</p>
+                                                <form method="post" action="/Housing/Houses/id=@house.HouseId/ownerId=@house.OwnerId/status=false" class="col-md-3">
+                                                    <button class="btn btn-warning btn-sm">Убрать из продажи</button>
+                                                </form>
+                                                <div class="col-md-6"></div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                                <form method="post" action="/Housing/Houses/id=@house.HouseId/ownerId=@house.OwnerId/status=true">
+                                                    <button class="btn btn-warning btn-sm">Выставить на продажу</button>
+                                                </form>
+                                        }
+                                    }
                                     <h5 class="card-title">@house.Name</h5>
                                     <p class="card-text text-primary">@Enum.GetName(typeof(HouseType), house.Type)</p>
                                     <p class="card-text text-success">@house.Price KZT</p>
@@ -131,6 +148,15 @@
                                 <div class="card">
                                     <h5 class="card-header">@count</h5>
                                     <div class="card-body">
+                                        @{ if (request.IsApplied)
+                                            {
+                                                <p class="text-success">Одобрен</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="text-secondary">В процессе рассмотрения</p>
+                                            }
+                                        }
                                         <form style="text-align: right;" method="post" action="/HousingOwnerRequests/ownerId=@Model.Id/houseId=@request.HouseId/deletefromaction">
                                             <button type="submit" class="btn btn-outline-danger"><i style="font-size: 30px;" class="fa">&#xf014;</i></button>
                                         </form>
@@ -151,6 +177,15 @@
                                 <div class="card">
                                     <h5 class="card-header">@count</h5>
                                     <div class="card-body">
+                                        @{ if (request.IsApplied)
+                                            {
+                                                <p class="text-success">Одобрен</p>
+                                            }
+                                            else
+                                            {
+                                                <p class="text-secondary">В процессе рассмотрения</p>
+                                            }
+                                        }
                                         <form style="text-align: right;" method="post" action="/HousingResidentRequests/residentId=@Model.Id/houseId=@request.HouseId/deletefromaction">
                                             <button type="submit" class="btn btn-outline-danger"><i style="font-size: 30px;" class="fa">&#xf014;</i></button>
                                         </form>

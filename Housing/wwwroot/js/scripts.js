@@ -210,9 +210,9 @@ function appendResidentRequestForms(residentId, houseId) {
 function loadOwnerRequests(houseId) {
     $.get('/housingownerrequests/houseId=' + houseId).done(function (data) {
         for (let req of data) {
-            $('.ownersRequests').append('<a class="dropdown-item" href="#">' +
+            $('.ownersRequests').append('<a class="dropdown-item" href="#"><div class="row"><div class="col-md-10">' +
                 '<h5>' + req.owner.user.login + '</h5>' +
-                '<p class="lead">' + req.extraInfo + '</p>' +
+                '<p class="lead">' + req.extraInfo + '</p></div><form method="post" action="/housingownerrequests/ownerId=' + req.ownerId + '/houseId=' + houseId +'/apply" class="col-md-2"><button class="btn btn-outline-success">&#9989;</button></form></div>' +
                 '</a>');
         }
     });
@@ -220,9 +220,9 @@ function loadOwnerRequests(houseId) {
 function loadResidentRequests(houseId) {
     $.get('/housingresidentrequests/houseId=' + houseId).done(function (data) {
         for (let req of data) {
-            $('.residentsRequests').append('<a class="dropdown-item" href="#">' +
+            $('.residentsRequests').append('<a class="dropdown-item" href="#"><div class="row"><div class="col-md-10">' +
                 '<h5>' + req.resident.owner.user.login + '</h5>' +
-                '<p class="lead">' + req.extraInfo + '</p>' +
+                '<p class="lead">' + req.extraInfo + '</p></div><form method="post" action="/housingresidentrequests/residentId=' + req.residentId + '/houseId=' + houseId +'/apply" class="col-md-2"><button class="btn btn-outline-success">&#9989;</button></form></div>' +
                 '</a>');
         }
     });

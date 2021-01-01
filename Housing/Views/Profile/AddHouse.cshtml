@@ -27,6 +27,10 @@
         <label for="houseFile">Картинка</label>
         <input asp-for="@Model.ImageFile" type="file" class="form-control" id="houseFile">
     </div>
+    <div class="form-row">
+        <label for="houseSellingStatus">На продажу</label>
+        <input asp-for="@Model.IsSelling" type="checkbox" class="form-control d-inline" id="houseSellingStatus">
+    </div>
     <div class="form-group" style="text-align: right;">
         <button type="submit" class="btn btn-lg btn-primary">Опубликовать</button>
     </div>

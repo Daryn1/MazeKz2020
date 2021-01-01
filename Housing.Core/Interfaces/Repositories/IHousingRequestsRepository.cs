@@ -11,7 +11,7 @@ namespace Housing.Core.Interfaces.Repositories
         Task<bool> DeleteRequest(T request);
         Task<ICollection<D>> GetRequests(long houseId);
         Task<bool> HasRequest(T request);
-
-        Task<T> GetByIds(long ownerId, long houseId);
+        Task<bool> ApplyRequest(long userId, long houseId);
+        Task<T> GetByIds(long userId, long houseId);
     }
 }

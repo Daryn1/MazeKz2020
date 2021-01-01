@@ -57,10 +57,19 @@ namespace Housing.Infrastructure.Repositories
 
         public async Task<ICollection<HousingResidentRequestDto>> GetRequests(long houseId)
         {
-            return await _context.HousingResidentRequests.AsNoTracking().Where(r => r.HouseId == houseId).Include(r => r.Resident).
+            return await _context.HousingResidentRequests.AsNoTracking().Where(r => r.HouseId == houseId && r.IsApplied == false).Include(r => r.Resident).
                 ThenInclude(r => r.Owner).ThenInclude(r => r.User).
                 Select(r => _mapper.Map<HousingResidentRequestDto>(r)).
                 ToListAsync();
+        }
+
+        public async Task<bool> ApplyRequest(long userId, long houseId)
+        {
+            var request = await _context.HousingResidentRequests.FirstOrDefaultAsync(r => r.ResidentId == userId && r.HouseId == houseId);
+            request.IsApplied = true;
+            var resident = await _context.HouseResidents.FindAsync(userId);
+            resident.HouseId = houseId;
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

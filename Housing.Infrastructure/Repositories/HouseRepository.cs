@@ -18,7 +18,7 @@ namespace Housing.Infrastructure.Repositories
 
         public override async Task<ICollection<HouseDto>> GetAll()
         {
-            return await Context.Houses.AsNoTracking().Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
+            return await Context.Houses.AsNoTracking().Where(h => h.IsSelling).Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
         }
         public override async Task<House> GetById(long id)
         {
@@ -33,49 +33,40 @@ namespace Housing.Infrastructure.Repositories
                 hasType = house.Type != Core.Enums.HouseType.Ничего;
             double bound = 5000000;
                 if (hasPrice && hasStreet && hasType)
-                    return await Context.Houses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
-                    (h.Price >= house.Price - bound && h.Price <= house.Price + bound) && h.Type == house.Type).
-                    AsNoTracking().
-                    //Include(h => h.Owner).
+                    return await Context.Houses.
+                    AsNoTracking().Where(h => EF.Functions.Like(h.Street, house.Street) &&
+                    (h.Price >= house.Price - bound && h.Price <= house.Price + bound) && h.Type == house.Type && h.IsSelling).
                     Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
                 else if (hasPrice && hasType)
-                    return await Context.Houses.Where(h => (h.Price >= house.Price - bound && h.Price <= house.Price + bound) &&
-                    h.Type == house.Type).
-                    AsNoTracking().
-                    //Include(h => h.Owner).
+                    return await Context.Houses.AsNoTracking().Where(h => (h.Price >= house.Price - bound && h.Price <= house.Price + bound) &&
+                    h.Type == house.Type && h.IsSelling).
                     Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
                 else if (hasStreet && hasType)
-                    return await Context.Houses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
-                    h.Type == house.Type).
-                    AsNoTracking().
-                    //Include(h => h.Owner).
+                    return await Context.Houses.
+                    AsNoTracking().Where(h => EF.Functions.Like(h.Street, house.Street) &&
+                    h.Type == house.Type && h.IsSelling).
                     Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
                 else if(hasPrice && hasStreet)
-                    return await Context.Houses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
-                    (h.Price >= house.Price - bound && h.Price <= house.Price + bound)).
-                    AsNoTracking().
-                    //Include(h => h.Owner).
+                    return await Context.Houses.
+                    AsNoTracking().Where(h => EF.Functions.Like(h.Street, house.Street) &&
+                    (h.Price >= house.Price - bound && h.Price <= house.Price + bound) && h.IsSelling).
                     Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
                 else if(hasPrice)
-                    return await Context.Houses.Where(h => 
-                    (h.Price >= house.Price - bound && h.Price <= house.Price + bound)).
-                    AsNoTracking().
-                    //Include(h => h.Owner).
+                    return await Context.Houses.
+                    AsNoTracking().Where(h => 
+                    (h.Price >= house.Price - bound && h.Price <= house.Price + bound) && h.IsSelling).
                     Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
                 else if(hasStreet)
-                    return await Context.Houses.Where(h => EF.Functions.Like(h.Street, house.Street)).
-                    AsNoTracking().
-                    //Include(h => h.Owner).
+                    return await Context.Houses.
+                    AsNoTracking().Where(h => EF.Functions.Like(h.Street, house.Street) && h.IsSelling).
                     Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
                 else if(hasType)
-                    return await Context.Houses.Where(h => h.Type == house.Type).
-                    AsNoTracking().
-                    //Include(h => h.Owner).
+                    return await Context.Houses.
+                    AsNoTracking().Where(h => h.Type == house.Type && h.IsSelling).
                     Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
                 else
                     return await Context.Houses.
-                    AsNoTracking().
-                    //Include(h => h.Owner).
+                    AsNoTracking().Where(h => h.IsSelling).
                     Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
         }
 

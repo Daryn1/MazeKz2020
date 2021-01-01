@@ -13,7 +13,7 @@ namespace Housing.Core.Models
         public string Name { get; set; }
         public string Street { get; set; }
         public string Info { get; set; }
-        public bool IsBought { get; set; }
+        public bool IsSelling { get; set; }
         public double Price { get; set; }
         public HouseType Type { get; set; }
         public int MaxResidentsCount { get; set; }

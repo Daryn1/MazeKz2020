@@ -13,6 +13,7 @@ namespace Housing.Core.DTOs
         public string ExtraInfo { get; set; }
         [Required]
         public long HouseId { get; set; }
+        public bool IsApplied { get; set; }
         public HouseDto House { get; set; }
         [Required]
         public long OwnerId { get; set; }

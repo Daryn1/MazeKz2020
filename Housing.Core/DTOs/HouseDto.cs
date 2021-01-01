@@ -16,7 +16,7 @@ namespace Housing.Core.DTOs
         public string Street { get; set; }
         [Required]
         public string Info { get; set; }
-        public bool IsBought { get; set; }
+        public bool IsSelling { get; set; }
         [Required]
         public double Price { get; set; }
         public IFormFile ImageFile { get; set; }

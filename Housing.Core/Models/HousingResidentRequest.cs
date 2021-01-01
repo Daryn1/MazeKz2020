@@ -9,6 +9,7 @@ namespace Housing.Core.Models
         public long Id { get; set; }
         public DateTime SentAt { get; set; }
         public string ExtraInfo { get; set; }
+        public bool IsApplied { get; set; }
         public long HouseId { get; set; }
         public House House { get; set; }
         public long ResidentId { get; set; }

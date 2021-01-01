@@ -33,9 +33,9 @@ namespace Housing.Infrastructure.Repositories
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<HousingOwnerRequest> GetByIds(long ownerId, long houseId)
+        public async Task<HousingOwnerRequest> GetByIds(long userId, long houseId)
         {
-            return await _context.HousingOwnerRequests.FirstOrDefaultAsync(r => r.OwnerId == ownerId && r.HouseId == houseId);
+            return await _context.HousingOwnerRequests.FirstOrDefaultAsync(r => r.OwnerId == userId && r.HouseId == houseId);
         }
 
         public async Task<bool> HasRequest(HousingOwnerRequest request)
@@ -45,10 +45,19 @@ namespace Housing.Infrastructure.Repositories
 
         public async Task<ICollection<HousingOwnerRequestDto>> GetRequests(long houseId)
         {
-            return await _context.HousingOwnerRequests.AsNoTracking().Where(r => r.HouseId == houseId).Include(r => r.Owner).
+            return await _context.HousingOwnerRequests.AsNoTracking().Where(r => r.HouseId == houseId && r.IsApplied == false).Include(r => r.Owner).
                 ThenInclude(o => o.User).
                 Select(r => _mapper.Map<HousingOwnerRequestDto>(r)).
                 ToListAsync();
+        }
+
+        public async Task<bool> ApplyRequest(long userId, long houseId)
+        {
+            var request = await GetByIds(userId, houseId);
+            request.IsApplied = true;
+            var house = await _context.Houses.FindAsync(houseId);
+            house.OwnerId = userId;
+            return await _context.SaveChangesAsync() > 0;
         }
     }
 }
