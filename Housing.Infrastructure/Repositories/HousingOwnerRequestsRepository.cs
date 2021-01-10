@@ -53,10 +53,13 @@ namespace Housing.Infrastructure.Repositories
 
         public async Task<bool> ApplyRequest(long userId, long houseId)
         {
+            var house = await _context.Houses.FindAsync(houseId);
+            var user = await _context.HouseOwners.FindAsync(userId);
+            if (user.Balance < house.Price) return false;
+            user.Balance -= house.Price;
+            house.OwnerId = userId;
             var request = await GetByIds(userId, houseId);
             request.IsApplied = true;
-            var house = await _context.Houses.FindAsync(houseId);
-            house.OwnerId = userId;
             return await _context.SaveChangesAsync() > 0;
         }
     }

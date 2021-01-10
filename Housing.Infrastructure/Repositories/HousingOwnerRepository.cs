@@ -41,7 +41,7 @@ namespace Housing.Infrastructure.Repositories
         {
            return await Context.HouseOwners.AsNoTracking().
                 Include(o => o.User).
-                FirstOrDefaultAsync(o => o.User.Login == login);
+                FirstOrDefaultAsync(o => o.User.Login.Equals(login));
         }
 
         public override async Task<bool> HasEntity(HousingOwner model)

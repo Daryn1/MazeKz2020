@@ -20,7 +20,7 @@ namespace Housing.Infrastructure.Repositories
         }
         public virtual async Task<T> Create(T model)
         {
-            await Context.Set<T>().AddAsync(model);
+            Context.Set<T>().Add(model);
             await Context.SaveChangesAsync();
             return model;
         }
@@ -39,7 +39,8 @@ namespace Housing.Infrastructure.Repositories
 
         public virtual async Task<bool> DeleteById(long id)
         {
-            Context.Set<T>().Remove(await Context.Set<T>().FindAsync(id));
+            var model = await GetById(id);
+            Context.Set<T>().Remove(model);
             return await Context.SaveChangesAsync() > 0;
         }
 
