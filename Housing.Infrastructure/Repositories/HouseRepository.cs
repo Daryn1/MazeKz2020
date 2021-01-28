@@ -10,15 +10,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Housing.Infrastructure.Repositories
 {
-    public class HouseRepository : ModelRepository<House, HouseDto>, IHouseRepository
+    public class HouseRepository : ModelRepository<House>, IHouseRepository
     {
-        public HouseRepository(ModelContext context, IMapper mapper) : base(context, mapper)
+        public HouseRepository(ModelContext context) : base(context)
         {
         }
 
-        public override async Task<ICollection<HouseDto>> GetAll()
+        public override async Task<ICollection<House>> GetAll()
         {
-            return await Context.Houses.AsNoTracking().Where(h => h.IsSelling).Select(o => Mapper.Map<HouseDto>(o)).ToListAsync();
+            return await Context.Houses.AsNoTracking().Where(h => h.IsSelling).ToListAsync();
         }
         public override async Task<House> GetById(long id)
         {
@@ -27,12 +27,13 @@ namespace Housing.Infrastructure.Repositories
                 FirstOrDefaultAsync(o => o.HouseId == id);
         }
 
-        public async Task<ICollection<HouseDto>> GetFilteredHouses(FilteredHouseDto house)
+        public async Task<ICollection<House>> GetFilteredHouses(FilteredHouseDto house)
         {
             bool hasPrice = house.Price != default, hasStreet = !string.IsNullOrEmpty(house.Street), 
                 hasType = house.Type != Core.Enums.HouseType.Ничего;
-            var filteredHouses = Context.Houses.AsNoTracking().Select(h => Mapper.Map<HouseDto>(h));
+            var filteredHouses = Context.Houses.AsNoTracking();
             double bound = 5000000;
+
             if (hasPrice && hasStreet && hasType)
                 filteredHouses = filteredHouses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
                 (h.Price >= house.Price - bound && h.Price <= house.Price + bound) && h.Type == house.Type && h.IsSelling);
@@ -62,7 +63,7 @@ namespace Housing.Infrastructure.Repositories
             else
                 filteredHouses = filteredHouses.Where(h => h.IsSelling);
 
-            return await filteredHouses.ToListAsync();
+           return await filteredHouses.ToListAsync();
         }
 
         public async Task<double> GetMaxHousePrice()

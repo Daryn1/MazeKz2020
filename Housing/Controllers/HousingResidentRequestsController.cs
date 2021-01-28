@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Housing.Core.DTOs;
 using Housing.Core.Interfaces.Repositories;
 using Housing.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,12 +16,15 @@ namespace Housing.Controllers
     [ApiController]
     public class HousingResidentRequestsController : ControllerBase
     {
-        private readonly IHousingRequestsRepository<HousingResidentRequest, HousingResidentRequestDto> _residentRequests;
-        public HousingResidentRequestsController(IHousingRequestsRepository<HousingResidentRequest, HousingResidentRequestDto> residentRequests)
+        private readonly IHousingRequestsRepository<HousingResidentRequest> _residentRequests;
+        private readonly IMapper _mapper;
+        public HousingResidentRequestsController(IHousingRequestsRepository<HousingResidentRequest> residentRequests, IMapper mapper)
         {
             _residentRequests = residentRequests;
+            _mapper = mapper;
         }
         [HttpPost("add")]
+        [Authorize]
         public async Task<IActionResult> AddResidentRequest(HousingResidentRequestDto request)
         {
             if (!ModelState.IsValid) return BadRequest("Заполните все поля");
@@ -30,8 +35,9 @@ namespace Housing.Controllers
                 HouseId = request.HouseId,
                 ResidentId = request.ResidentId
             };
-            if (await _residentRequests.HasRequest(requestModel)) return BadRequest("Запрос на жительство уже существует");
-            if (await _residentRequests.AddRequest(requestModel)) return Ok("Отправлен запрос на жительство");
+            if (await _residentRequests.HasEntity(requestModel)) return BadRequest("Запрос на жительство уже существует");
+            var createdRequest = await _residentRequests.Create(requestModel);
+            if (createdRequest != null) return Ok("Отправлен запрос на жительство");
             return BadRequest("Не удалось отправить запрос");
         }
         [HttpGet("residentId={ownerId}/houseId={houseId}")]
@@ -42,32 +48,35 @@ namespace Housing.Controllers
                 HouseId = houseId,
                 ResidentId = ownerId
             };
-            if (await _residentRequests.HasRequest(requestModel)) return Ok("Добавлен запрос");
+            if (await _residentRequests.HasEntity(requestModel)) return Ok("Добавлен запрос");
             return NotFound();
         }
         [HttpGet("houseId={houseId}")]
         public async Task<ICollection<HousingResidentRequestDto>> GetOwnersRequests(long houseId)
         {
-            return await _residentRequests.GetRequests(houseId);
+            return _mapper.Map<ICollection<HousingResidentRequestDto>>(await _residentRequests.GetRequests(houseId));
         }
 
         [HttpDelete("residentId={ownerId}/houseId={houseId}/delete")]
+        [Authorize]
         public async Task<IActionResult> DeleteResidentRequest(long ownerId, long houseId)
         {
             var request = await _residentRequests.GetByIds(ownerId, houseId);
             if (request == null) return NotFound("Не найден запрос");
-            if (await _residentRequests.DeleteRequest(request)) return Ok("Удален запрос");
+            if (await _residentRequests.Delete(request)) return Ok("Удален запрос");
             return BadRequest("Не удалось удалить запрос");
         }
         [HttpPost("residentId={ownerId}/houseId={houseId}/deletefromaction")]
+        [Authorize]
         public async Task<IActionResult> DeleteResidentRequestFromAction(long ownerId, long houseId)
         {
             var request = await _residentRequests.GetByIds(ownerId, houseId);
             if (request == null) return RedirectToAction("ProfilePage", "Profile", new { requestDeleteError = "Запрос не найден" });
-            if (await _residentRequests.DeleteRequest(request)) return RedirectToAction("ProfilePage", "Profile");
+            if (await _residentRequests.Delete(request)) return RedirectToAction("ProfilePage", "Profile");
             return RedirectToAction("ProfilePage", "Profile", new { requestDeleteError = "Не удалось удалить запрос" });
         }
         [HttpPost("residentId={residentId}/houseId={houseId}/apply")]
+        [Authorize]
         public async Task<IActionResult> ApplyResidentRequest(long residentId, long houseId)
         {
             if (await _residentRequests.ApplyRequest(residentId, houseId)) return Redirect("/Housing/Houses/id=" + houseId);

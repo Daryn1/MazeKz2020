@@ -28,6 +28,8 @@ namespace Housing.Infrastructure.Data
             modelBuilder.Entity<House>().HasMany(h => h.Comments).WithOne(c => c.House).OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<HousingResident>().HasMany(u => u.Comments).WithOne(c => c.User).OnDelete(DeleteBehavior.NoAction);
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<HousingOwner>().HasMany(o => o.OwnerRequests).WithOne(r => r.Owner);
+            modelBuilder.Entity<HousingResident>().HasMany(o => o.ResidentRequests).WithOne(r => r.Resident);
         }
     }
 }

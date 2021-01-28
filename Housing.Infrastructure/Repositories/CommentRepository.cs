@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace Housing.Infrastructure.Repositories
 {
-    public class CommentRepository : ModelRepository<Comment, CommentDto>, ICommentRepository
+    public class CommentRepository : ModelRepository<Comment>, ICommentRepository
     {
-        public CommentRepository(ModelContext context, IMapper mapper) : base(context, mapper)
+        public CommentRepository(ModelContext context) : base(context)
         {
         }
 
@@ -24,16 +24,12 @@ namespace Housing.Infrastructure.Repositories
                 FirstOrDefaultAsync(c => c.CommentId == id);
         }
 
-        public override async Task<ICollection<CommentDto>> GetAll()
-        {
-            return await Context.HouseAdvertisementComments.AsNoTracking().Select(c => Mapper.Map<CommentDto>(c)).ToListAsync();
-        }
-
-        public async Task<ICollection<CommentDto>> GetCommentsForHouse(long id)
+        public async Task<ICollection<Comment>> GetCommentsForHouse(long id)
         {
             return await Context.HouseAdvertisementComments.AsNoTracking().
                 Where(c => c.HouseId == id).Include(c => c.User).ThenInclude(u => u.Owner).ThenInclude(o => o.User).
-                Select(c => Mapper.Map<CommentDto>(c)).ToListAsync();
+                OrderByDescending(o => o.LeavedAt).
+                ToListAsync();
         }
     }
 }

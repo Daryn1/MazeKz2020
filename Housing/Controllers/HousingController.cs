@@ -8,6 +8,7 @@ using Housing.Core.DTOs;
 using Housing.Core.Enums;
 using Housing.Core.Interfaces.Repositories;
 using Housing.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,7 @@ namespace Housing.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddHouse(HouseDto house)
         {
             string error;
@@ -72,12 +74,12 @@ namespace Housing.Controllers
         {
             if (!house.HasAllDefaultValues())
             {
-                ViewBag.Houses = await _repos.GetFilteredHouses(house);
+                ViewBag.Houses = _mapper.Map<ICollection<HouseDto>>(await _repos.GetFilteredHouses(house));
             }
             else
             {
                 ViewBag.LoginErrorMessage = errorMessage;
-                ViewBag.Houses = await _repos.GetAll();
+                ViewBag.Houses = _mapper.Map<ICollection<HouseDto>>(await _repos.GetAll());
             }
             return View();
         }
@@ -92,6 +94,7 @@ namespace Housing.Controllers
         }
 
         [HttpPost("/Housing/Houses/id={id}/update/name")]
+        [Authorize]
         public async Task<IActionResult> UpdateHouseNameAsync(string houseName, long id)
         {
             if (!string.IsNullOrEmpty(houseName))
@@ -104,6 +107,7 @@ namespace Housing.Controllers
         }
 
         [HttpPost("/Housing/Houses/id={id}/update/street")]
+        [Authorize]
         public async Task<IActionResult> UpdateHouseStreetAsync(string houseStreet, long id)
         {
             if (!string.IsNullOrEmpty(houseStreet))
@@ -116,6 +120,7 @@ namespace Housing.Controllers
         }
 
         [HttpPost("/Housing/Houses/id={id}/update/info")]
+        [Authorize]
         public async Task<IActionResult> UpdateHouseInfoAsync(string houseInfo, long id)
         {
             if (!string.IsNullOrEmpty(houseInfo))
@@ -128,6 +133,7 @@ namespace Housing.Controllers
         }
 
         [HttpPost("/Housing/Houses/id={id}/update/price")]
+        [Authorize]
         public async Task<IActionResult> UpdateHousePriceAsync(double housePrice, long id)
         {
             if (housePrice != default)
@@ -140,6 +146,7 @@ namespace Housing.Controllers
         }
 
         [HttpPost("/Housing/Houses/id={id}/update/type")]
+        [Authorize]
         public async Task<IActionResult> UpdateHouseTypeAsync(string houseType, long id)
         {
             if (houseType != default)
@@ -152,6 +159,7 @@ namespace Housing.Controllers
         }
 
         [HttpPost("/Housing/Houses/id={id}/update/image")]
+        [Authorize]
         public async Task<IActionResult> UpdateHouseImageAsync(IFormFile houseFile, long id)
         {
             if(houseFile != null)
@@ -170,6 +178,7 @@ namespace Housing.Controllers
         }
 
         [HttpPost("/Housing/Houses/id={houseId}/ownerId={ownerId}/status={isSelling}")]
+        [Authorize]
         public async Task<IActionResult> SetHouseStatus(long ownerId, long houseId, bool isSelling)
         {
             var house = await _repos.GetById(houseId);
@@ -182,6 +191,7 @@ namespace Housing.Controllers
         }
 
         [HttpPost("/Housing/Houses/id={id}/delete")]
+        [Authorize]
         public async Task<IActionResult> DeleteHouseAsync(long id)
         {
             if (await _repos.DeleteById(id)) return RedirectToAction("ProfilePage", "Profile");

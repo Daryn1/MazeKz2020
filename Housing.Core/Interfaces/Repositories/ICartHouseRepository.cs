@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Housing.Core.Interfaces.Repositories
 {
-    public interface ICartHouseRepository
+    public interface ICartHouseRepository : IModelRepository<CartHouse>
     {
-        Task<bool> AddToCart(long ownerId, long houseId);
-        Task<bool> DeleteFromCart(long ownerId, long houseId);
+       // Task<bool> AddToCart(long ownerId, long houseId);
+      //  Task<bool> DeleteFromCart(long ownerId, long houseId);
         Task<CartHouse> GetFromCartByIds(long ownerId, long houseId);
-        Task<bool> HasHouseInCart(long ownerId, long houseId);
+       // Task<bool> HasHouseInCart(long ownerId, long houseId);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Housing.Core.DTOs;
 using Housing.Core.Helpers;
 using Housing.Core.Interfaces.Repositories;
 using Housing.Core.Models;
@@ -22,9 +21,9 @@ namespace Housing.Extensions
             services.AddScoped<IHousingOwnerRepository, HousingOwnerRepository>();
             services.AddScoped<ICitizenUserRepository, CitizenUserRepository>();
             services.AddScoped<ICartHouseRepository, CartHouseRepository>();
-            services.AddScoped<IHousingRequestsRepository<HousingOwnerRequest, HousingOwnerRequestDto>,
+            services.AddScoped<IHousingRequestsRepository<HousingOwnerRequest>,
                 HousingOwnerRequestsRepository>();
-            services.AddScoped<IHousingRequestsRepository<HousingResidentRequest, HousingResidentRequestDto>,
+            services.AddScoped<IHousingRequestsRepository<HousingResidentRequest>,
                 HousingResidentRequestsRepository>();
         }
 

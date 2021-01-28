@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Housing.Core.Interfaces.Repositories
 {
-    public interface IHousingOwnerRepository : IModelRepository<HousingOwner, HousingOwnerDto>
+    public interface IHousingOwnerRepository : IModelRepository<HousingOwner>
     {
         Task<HousingOwner> GetByLogin(string login);
     }

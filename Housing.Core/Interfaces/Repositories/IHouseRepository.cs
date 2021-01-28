@@ -5,9 +5,9 @@ using Housing.Core.Models;
 
 namespace Housing.Core.Interfaces.Repositories
 {
-    public interface IHouseRepository : IModelRepository<House, HouseDto>
+    public interface IHouseRepository : IModelRepository<House>
     {
-        Task<ICollection<HouseDto>> GetFilteredHouses(FilteredHouseDto house);
+        Task<ICollection<House>> GetFilteredHouses(FilteredHouseDto house);
         Task<double> GetMaxHousePrice();
         Task<double> GetMinHousePrice();
     }

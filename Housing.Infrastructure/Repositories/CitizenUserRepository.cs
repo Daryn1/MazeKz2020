@@ -11,9 +11,9 @@ using WebMaze.DbStuff.Model;
 
 namespace Housing.Infrastructure.Repositories
 {
-    public class CitizenUserRepository : ModelRepository<CitizenUser, CitizenUserDto>, ICitizenUserRepository
+    public class CitizenUserRepository : ModelRepository<CitizenUser>, ICitizenUserRepository
     {
-        public CitizenUserRepository(ModelContext context, IMapper mapper) : base(context, mapper)
+        public CitizenUserRepository(ModelContext context) : base(context)
         {
         }
 

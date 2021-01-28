@@ -12,22 +12,20 @@ using System.Threading.Tasks;
 
 namespace Housing.Infrastructure.Repositories
 {
-    public class HousingOwnerRequestsRepository : IHousingRequestsRepository<HousingOwnerRequest, HousingOwnerRequestDto>
+    public class HousingOwnerRequestsRepository : ModelRepository<HousingOwnerRequest>, IHousingRequestsRepository<HousingOwnerRequest>
     {
         private readonly ModelContext _context;
-        private readonly IMapper _mapper;
-        public HousingOwnerRequestsRepository(ModelContext context, IMapper mapper)
+        public HousingOwnerRequestsRepository(ModelContext context) : base(context)
         {
             _context = context;
-            _mapper = mapper;
         }
-        public async Task<bool> AddRequest(HousingOwnerRequest request)
+        public override async Task<HousingOwnerRequest> Create(HousingOwnerRequest request)
         {
             _context.HousingOwnerRequests.Add(request);
-            return await _context.SaveChangesAsync() > 0;
+            await _context.SaveChangesAsync();
+            return request;
         }
-
-        public async Task<bool> DeleteRequest(HousingOwnerRequest request)
+        public override async Task<bool> Delete(HousingOwnerRequest request)
         {
             _context.HousingOwnerRequests.Remove(request);
             return await _context.SaveChangesAsync() > 0;
@@ -38,16 +36,15 @@ namespace Housing.Infrastructure.Repositories
             return await _context.HousingOwnerRequests.FirstOrDefaultAsync(r => r.OwnerId == userId && r.HouseId == houseId);
         }
 
-        public async Task<bool> HasRequest(HousingOwnerRequest request)
+        public override async Task<bool> HasEntity(HousingOwnerRequest request)
         {
             return await _context.HousingOwnerRequests.AnyAsync(r => r.HouseId == request.HouseId && r.OwnerId == request.OwnerId);
         }
 
-        public async Task<ICollection<HousingOwnerRequestDto>> GetRequests(long houseId)
+        public async Task<ICollection<HousingOwnerRequest>> GetRequests(long houseId)
         {
             return await _context.HousingOwnerRequests.AsNoTracking().Where(r => r.HouseId == houseId && r.IsApplied == false).Include(r => r.Owner).
-                ThenInclude(o => o.User).
-                Select(r => _mapper.Map<HousingOwnerRequestDto>(r)).
+                ThenInclude(o => o.User).OrderByDescending(r => r.SentAt).
                 ToListAsync();
         }
 

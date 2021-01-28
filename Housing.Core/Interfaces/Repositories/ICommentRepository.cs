@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Housing.Core.Interfaces.Repositories
 {
-    public interface ICommentRepository : IModelRepository<Comment, CommentDto>
+    public interface ICommentRepository : IModelRepository<Comment>
     {
-        Task<ICollection<CommentDto>> GetCommentsForHouse(long id);
+        Task<ICollection<Comment>> GetCommentsForHouse(long id);
     }
 }

@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace Housing.Infrastructure.Repositories
 {
-    public class HousingResidentRepository : ModelRepository<HousingResident, HousingResidentDto>, IHousingResidentRepository
+    public class HousingResidentRepository : ModelRepository<HousingResident>, IHousingResidentRepository
     {
-        public HousingResidentRepository(ModelContext context, IMapper mapper) : base(context, mapper)
+        public HousingResidentRepository(ModelContext context) : base(context)
         {
         }
 
@@ -24,10 +24,9 @@ namespace Housing.Infrastructure.Repositories
                 Include(r => r.House).Include(r => r.Owner).FirstOrDefaultAsync(r => r.OwnerId == id);
         }
 
-        public override async Task<ICollection<HousingResidentDto>> GetAll()
+        public override async Task<ICollection<HousingResident>> GetAll()
         {
-           return await Context.HouseResidents.AsNoTracking().Include(r => r.House).Include(r => r.Owner).
-                Select(r => Mapper.Map<HousingResidentDto>(r)).ToListAsync();
+           return await Context.HouseResidents.AsNoTracking().Include(r => r.House).Include(r => r.Owner).ToListAsync();
         }
     }
 }

@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Housing.Core.DTOs;
 using Housing.Core.Interfaces.Repositories;
 using Housing.Core.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebMaze.DbStuff.Model;
+using Microsoft.Extensions.Configuration;
 
 namespace Housing.Controllers
 {
@@ -22,6 +23,7 @@ namespace Housing.Controllers
             _owners = owners;
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginUser(CitizenUserDto user)
         {
             var userModel = await _users.GetByLogin(user.Login);
@@ -34,15 +36,18 @@ namespace Housing.Controllers
             var owner = new HousingOwner { UserId = userModel.Id, User = userModel };
             if (!await _owners.HasEntity(owner)) owner = await _owners.Create(owner);
             else owner = await _owners.GetByLogin(user.Login);
+            var identity = AuthentificationOptions.CreateIdentity(owner);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
             HttpContext.Session.SetString("Id", owner.Id.ToString());
-            HttpContext.Session.SetString("Username", owner.User.Login);
+            HttpContext.Session.SetString("Username", user.Login);
             HttpContext.Session.SetString("Role", "Owner");
             return RedirectToAction("Houses", "Housing");
         }
 
-        public IActionResult SignoutUser()
+        public async Task<IActionResult> SignoutUserAsync()
         {
             HttpContext.Session.Clear();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Houses", "Housing");
         }
     }

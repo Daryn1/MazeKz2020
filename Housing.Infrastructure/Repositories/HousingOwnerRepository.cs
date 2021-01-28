@@ -11,19 +11,21 @@ using System.Threading.Tasks;
 
 namespace Housing.Infrastructure.Repositories
 {
-    public class HousingOwnerRepository : ModelRepository<HousingOwner, HousingOwnerDto>, IHousingOwnerRepository
+    public class HousingOwnerRepository : ModelRepository<HousingOwner>, IHousingOwnerRepository
     {
-        public HousingOwnerRepository(ModelContext context, IMapper mapper) : base(context, mapper)
+        public HousingOwnerRepository(ModelContext context) : base(context)
         {
         }
         public override async Task<HousingOwner> Create(HousingOwner model)
         {
             model.Balance = new Random().Next(5000000, 10000000) * 10;
-            Context.HouseOwners.Add(model);
-            await Context.SaveChangesAsync();
-            HousingResident user = new HousingResident { OwnerId = model.Id, HouseId = null };
-            Context.HouseResidents.Add(user);
-            await Context.SaveChangesAsync();
+            var addedState = Context.HouseOwners.Add(model).State;
+            if (addedState == EntityState.Added)
+            {
+                HousingResident user = new HousingResident { OwnerId = model.Id, HouseId = null };
+                Context.HouseResidents.Add(user);
+                await Context.SaveChangesAsync();
+            }
             return model;
         }
         public override async Task<HousingOwner> GetById(long id)

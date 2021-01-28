@@ -7,7 +7,7 @@ using WebMaze.DbStuff.Model;
 
 namespace Housing.Core.Interfaces.Repositories
 {
-    public interface ICitizenUserRepository : IModelRepository<CitizenUser, CitizenUserDto>
+    public interface ICitizenUserRepository : IModelRepository<CitizenUser>
     {
         Task<CitizenUser> GetByLogin(string login);
     }

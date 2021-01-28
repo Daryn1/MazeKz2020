@@ -9,14 +9,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Housing.Infrastructure.Repositories
 {
-    public class ModelRepository<T,D> : IModelRepository<T, D> where T : class where D : class
+    public class ModelRepository<T> : IModelRepository<T> where T : class
     {
         protected ModelContext Context;
-        protected readonly IMapper Mapper;
-        public ModelRepository(ModelContext context, IMapper mapper)
+        public ModelRepository(ModelContext context)
         {
             Context = context;
-            Mapper = mapper;
         }
         public virtual async Task<T> Create(T model)
         {
@@ -49,9 +47,9 @@ namespace Housing.Infrastructure.Repositories
             return await Context.Set<T>().FindAsync(id);
         }
 
-        public virtual async Task<ICollection<D>> GetAll()
+        public virtual async Task<ICollection<T>> GetAll()
         {
-           return await Context.Set<T>().Select(m => Mapper.Map<D>(m)).ToListAsync();
+           return await Context.Set<T>().ToListAsync();
         }
 
         public virtual async Task<bool> HasEntity(T model)

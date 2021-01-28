@@ -9,6 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Housing
 {
@@ -31,7 +34,15 @@ namespace Housing
             services.RegisterAutoMapper();
             services.AddHousingRepositories();
             services.AddDbContext<ModelContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), assembly => assembly.MigrationsAssembly("Housing.Infrastructure")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
+                assembly => assembly.MigrationsAssembly("Housing.Infrastructure")));
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            {
+                var path = new PathString("/HousingOwners/LoginUser");
+                options.LoginPath = path;
+                options.Cookie.Name = "User.Auth";
+                options.AccessDeniedPath = path;
+            });
             services.AddSession(options =>
             {
                 options.Cookie.Name = "Housing.Session";
@@ -52,10 +63,9 @@ namespace Housing
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
-            // app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseSession();
             app.UseEndpoints(endpoints =>
             {

@@ -19,6 +19,7 @@ namespace Housing.Core.DTOs
         public bool IsSelling { get; set; }
         [Required]
         public double Price { get; set; }
+        [Required]
         public IFormFile ImageFile { get; set; }
         public string ImagePath { get; set; }
         public HouseType Type { get; set; }

@@ -6,11 +6,13 @@ using AutoMapper;
 using Housing.Core.DTOs;
 using Housing.Core.Interfaces.Repositories;
 using Housing.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Housing.Controllers
 {
     [Controller]
+    [Authorize]
     public class CommentsController : Controller
     {
         private readonly ICommentRepository _comments;
@@ -34,9 +36,11 @@ namespace Housing.Controllers
             return Redirect("/Housing/Houses/id=" + comment.HouseId + "?commentError=Не удалось добавить комментарий");
         }
         [HttpGet("/Comments/houseId={houseId}")]
+        [AllowAnonymous]
         public async Task<ICollection<CommentDto>> GetCommentsForHouse(long houseId)
         {
-            return await _comments.GetCommentsForHouse(houseId);
+            var comments = await _comments.GetCommentsForHouse(houseId);
+            return _mapper.Map<ICollection<CommentDto>>(comments);
         }
     }
 }

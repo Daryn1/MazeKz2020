@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Housing.Core.DTOs;
 using Housing.Core.Interfaces.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Housing.Controllers
 {
     [Route("{controller}/")]
+    [Authorize]
     public class ProfileController : Controller
     {
         private readonly IHousingOwnerRepository _owners;
