@@ -12,5 +12,7 @@ namespace WebMaze.DbStuff.Model
         public string Street { get; set; }
 
         public int HouseNumber { get; set; }
+
+        public virtual CitizenUser Owner { get; set; }
     }
 }

@@ -48,13 +48,24 @@ namespace WebMaze.Controllers
         [HttpGet]
         public IActionResult ManageBus()
         {
-            return View();
+            var buses = busRepository.GetAll();
+            var viewModel = new BusManageViewModel();
+            foreach(var bus in buses)
+            {
+                var model = mapper.Map<BusViewModel>(bus);
+                viewModel.Buses.Add(model);
+            }
+            return View(viewModel);
         }
 
         [HttpPost]
         public IActionResult ManageBus(BusManageViewModel viewModel)
         {
-            return View();
+            var bus = mapper.Map<Bus>(viewModel);
+            busRepository.Save(bus);
+
+
+            return RedirectToAction("ManageBus","Bus");
         }
 
         [HttpGet]
@@ -69,5 +80,64 @@ namespace WebMaze.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult CreateBusRoute()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateBusRoute(CreateBusRouteViewModel viewModel)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
+            var busRoute = mapper.Map<BusRoute>(viewModel);
+            busRouteRepository.Save(busRoute);
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ManageBusRouteTime()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ManageBusRouteTime(BusRouteTimeManagmentViewModel viewModel)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ManageWorker()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ManageWorker(BusOrderViewModel viewModel)
+        {
+            return View();
+        }
+
+        public IActionResult BusAdminPartial()
+        {
+            return PartialView();
+        }
+
+        public IActionResult BusUserPartial()
+        {
+            return PartialView();
+        }
+
     }
 }
+
+/*
+ 
+Автобусы. Просмотр доступных маршрутов, работников, транспорта и запрос на склад. Остановка.
+Статус автобуса и оповещение стоящих на остановке о том, что автобус переполнен и когда будет доступен следующий. 
+Прием заказов на использование автобуса компаниями.
+*/

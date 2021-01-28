@@ -1,16 +1,41 @@
 ﻿@using WebMaze.Models.Bus
+@model BusManageViewModel
+
+<div>
+    @Html.Partial("BusAdminPartial")
+</div>
 
 
 <div>
-    <h2>Bus menu</h2>
-    <li>
-        <a class="nav-link text-dark" href="/Bus/Index">Home</a>
-    </li>
-    <li>
-        <a class="nav-link text-dark" href="/Bus/ManageBus">Manage bus</a>
-    </li>
-    <li>
-        <a class="nav-link text-dark" href="/Bus/OrderBus">Order bus</a>
-    </li>
+    <table>
+        @foreach (var bus in Model.Buses)
+        {
+            <tr>
+                <td>@bus.BusRouteId;</td>
+                <td>@bus.Capacity;</td>
+                <td>@bus.Capacity;</td>
+                <td>@bus.RegistrationPlate;</td>
+            </tr>
+          }
+    </table>
 </div>
-<div>Forms to edit/add bus routes/workers </div>
+
+        <div>
+            <form action="@Url.Action("ManageBus", "Bus")" method="post">
+                <div>
+                    Registration plate: @Html.TextBoxFor(x => x.Bus.RegistrationPlate)
+                </div>
+                <div>
+                    Capacity: @Html.TextBoxFor(x => x.Bus.Capacity)
+                </div>
+                <div>
+                    Number of route:@Html.TextBoxFor(x => x.Bus.BusRouteId)
+                </div>
+                <div>
+                    Worker ID: @Html.TextBoxFor(x => x.Bus.WorkerId)
+                </div>
+                <div>
+                    <input type="submit" value="Add bus" />
+                </div>
+            </form>
+        </div>

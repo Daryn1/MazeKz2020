@@ -1,36 +1,41 @@
-﻿@model WebMaze.Models.Police.PolicemanViewModel
+﻿@using WebMaze.Helpers.Police
+@model WebMaze.Models.Account.LoginViewModel
+
 @{
-    ViewBag.Title = "Регистрация полицейского";
-}
-@if (Model.ProfileVM == null)
-{
-    <h2>Выберите пользователя, которому хотите присвоить статус полицейского: </h2>
-}
-else
-{
-    <h2>Выберите аккаунт для входа:</h2>
+    Layout = "_PoliceLayout.cshtml";
+    ViewBag.Title = "Вход в аккаунт";
 }
 
-<div class="container-fluid">
-    <table class="table table-condensed table-striped table-hover col-md-12">
-        <thead>
-            <tr class="d-flex">
-                <th class="col-8">Логин</th>
-                <th class="col-2">Фото</th>
-                <th class="col-2"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.CitizenUserProfiles)
-            {
-                <tr class="d-flex">
-                    <td class="col-8">@item.Login</td>
-                    <td class="col-2"><img src="@item.AvatarUrl" class="rounded img-fluid" /></td>
-                    <td class="col-2 text-md-right">
-                        <a asp-controller="Police" asp-action="RegisterPoliceman" asp-route-id="@item.Id">Выбрать</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+@section Scripts{
+    <script src="~/js/site.js"></script>
+}
+
+<h2 class="text-center">Вход в аккаунт</h2>
+<hr />
+<form asp-controller="Police" asp-action="Login" method="post" class="needs-validation" novalidate>
+    <input name="returnUrl" type="hidden" value="@Model.ReturnUrl" />
+    <div class="form-group row justify-content-center">
+        <label for="login" class="col-md-1 mr-4">Логин:</label>
+        <div class="col-md-5">
+            <input class="form-control" name="login" type="text" value="@Model.Login" placeholder="Логин" required />
+            <div class="invalid-validation text-danger mt-2">@Html.ValidationMessage("Login")</div>
+            <div class="invalid-feedback">Введите логин</div>
+        </div>
+    </div>
+    <div class="form-group row justify-content-center">
+        <label for="password" class="col-md-1 mr-4">Пароль:</label>
+        <div class="col-md-5">
+            <input class="form-control" name="password" type="password" placeholder="Пароль" required />
+            <div class="invalid-validation text-danger mt-2">@Html.ValidationMessage("Password")</div>
+            <div class="invalid-feedback">Введите пароль</div>
+        </div>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary">Войти</button>
+    </div>
+</form>
+<div class="text-center">
+    <hr />
+    <h4>Нет аккаунта?</h4>
+    <a asp-controller="Account" asp-action="Registration">Регистрация</a>
 </div>
