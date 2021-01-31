@@ -10,5 +10,7 @@ namespace Housing.Core.Interfaces.Repositories
         Task<ICollection<House>> GetFilteredHouses(FilteredHouseDto house);
         Task<double> GetMaxHousePrice();
         Task<double> GetMinHousePrice();
+        Task<ICollection<House>> GetHousesByPage(int page, int countPerPage);
+        Task<int> GetHousesCount();
     }
 }

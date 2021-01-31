@@ -21,7 +21,7 @@ namespace Housing.Controllers
     {
         private readonly IHouseRepository _repos;
         private readonly IMapper _mapper;
-        private IWebHostEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
         public HousingController(IHouseRepository repos, IMapper mapper, IWebHostEnvironment environment)
         {
             _repos = repos;
@@ -41,6 +41,12 @@ namespace Housing.Controllers
         public async Task<double> GetMinHousePrice()
         {
             return await _repos.GetMinHousePrice();
+        }
+
+        [HttpGet("/housing/houses/count")]
+        public async Task<int> GetHousesCount()
+        {
+            return await _repos.GetHousesCount();
         }
 
         [HttpPost]
@@ -70,7 +76,7 @@ namespace Housing.Controllers
             error = "Не удалось опубликовать недвижимость";
             return RedirectToAction("ProfilePage", "Profile", new { error });
         }
-        public async Task<IActionResult> Houses(string errorMessage, FilteredHouseDto house)
+        public async Task<IActionResult> Houses(string errorMessage, FilteredHouseDto house, int? page)
         {
             if (!house.HasAllDefaultValues())
             {
@@ -79,7 +85,10 @@ namespace Housing.Controllers
             else
             {
                 ViewBag.LoginErrorMessage = errorMessage;
-                ViewBag.Houses = _mapper.Map<ICollection<HouseDto>>(await _repos.GetAll());
+                if (!page.HasValue)
+                    ViewBag.Houses = _mapper.Map<ICollection<HouseDto>>(await _repos.GetAll());
+                else
+                    ViewBag.Houses = _mapper.Map<ICollection<HouseDto>>(await _repos.GetHousesByPage(page.Value, 6));
             }
             return View();
         }

@@ -66,6 +66,17 @@ namespace Housing.Infrastructure.Repositories
            return await filteredHouses.ToListAsync();
         }
 
+        public async Task<ICollection<House>> GetHousesByPage(int page, int countPerPage)
+        {
+            return await Context.Houses.Where(h => h.IsSelling).OrderBy(h => h.HouseId).
+                Skip((page - 1) * countPerPage).Take(countPerPage).ToListAsync();
+        }
+
+        public async Task<int> GetHousesCount()
+        {
+            return await Context.Houses.CountAsync();
+        }
+
         public async Task<double> GetMaxHousePrice()
         {
             return await Context.Houses.MaxAsync(h => h.Price);

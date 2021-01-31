@@ -227,3 +227,13 @@ function loadResidentRequests(houseId) {
         }
     });
 }
+
+
+function loadHousePages() {
+    $.get('/housing/houses/count').done(function (data) {
+        let count = data;
+        for (let i = 1; i <= count/6; i++) {
+            $('.pagination').append('<li class="page-item"><a class="page-link" href="/Housing/Houses?page=' + i + '">' + i + '</a></li>');
+        }
+    });
+}

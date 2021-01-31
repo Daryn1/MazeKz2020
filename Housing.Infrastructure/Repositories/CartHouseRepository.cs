@@ -20,12 +20,6 @@ namespace Housing.Infrastructure.Repositories
         {
             _context = context;
         }
-        /*public async Task<bool> AddToCart(long ownerId, long houseId)
-        {
-            var cartHouse = new CartHouse { OwnerId = ownerId, HouseId = houseId };
-            _context.HouseCarts.Add(cartHouse);
-            return await _context.SaveChangesAsync() > 0;
-        }*/
 
         public async Task<CartHouse> GetFromCartByIds(long ownerId, long houseId)
         {
