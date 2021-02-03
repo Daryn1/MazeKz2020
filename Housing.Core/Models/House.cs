@@ -17,9 +17,9 @@ namespace Housing.Core.Models
         public double Price { get; set; }
         public HouseType Type { get; set; }
         public int MaxResidentsCount { get; set; }
-        public List<HousingResident> HousingUsers { get; set; }
-        public List<Comment> Comments { get; set; }
+        public virtual List<HousingResident> HousingUsers { get; set; }
+        public virtual List<Comment> Comments { get; set; }
         public long OwnerId { get; set; }
-        public HousingOwner Owner { get; set; }
+        public virtual HousingOwner Owner { get; set; }
     }
 }

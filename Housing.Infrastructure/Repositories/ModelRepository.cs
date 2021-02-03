@@ -11,8 +11,8 @@ namespace Housing.Infrastructure.Repositories
 {
     public class ModelRepository<T> : IModelRepository<T> where T : class
     {
-        protected ModelContext Context;
-        public ModelRepository(ModelContext context)
+        protected HousingContext Context;
+        public ModelRepository(HousingContext context)
         {
             Context = context;
         }

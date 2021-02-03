@@ -14,8 +14,8 @@ namespace Housing.Controllers
     [Authorize]
     public class CartHouseController : Controller
     {
-        private readonly ICartHouseRepository _carts;
-        public CartHouseController(ICartHouseRepository carts)
+        private readonly IHousingCartsRepository _carts;
+        public CartHouseController(IHousingCartsRepository carts)
         {
             _carts = carts;
         }

@@ -232,8 +232,21 @@ function loadResidentRequests(houseId) {
 function loadHousePages() {
     $.get('/housing/houses/count').done(function (data) {
         let count = data;
-        for (let i = 1; i <= count/6; i++) {
+        let pagesCount = getNumberOfPages(count);
+        for (let i = 1; i <= pagesCount; i++) {
             $('.pagination').append('<li class="page-item"><a class="page-link" href="/Housing/Houses?page=' + i + '">' + i + '</a></li>');
         }
     });
+}
+
+function getNumberOfPages(count) {
+    let res = 0;
+    for (let i = 0; i <= count; i++) {
+        if (i % 4 == 0) res++;
+        if (count - i >= 4) {
+            res++;
+            break;
+        }
+    }
+    return res;
 }

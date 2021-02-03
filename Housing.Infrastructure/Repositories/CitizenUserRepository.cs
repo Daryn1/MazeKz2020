@@ -13,7 +13,7 @@ namespace Housing.Infrastructure.Repositories
 {
     public class CitizenUserRepository : ModelRepository<CitizenUser>, ICitizenUserRepository
     {
-        public CitizenUserRepository(ModelContext context) : base(context)
+        public CitizenUserRepository(HousingContext context) : base(context)
         {
         }
 

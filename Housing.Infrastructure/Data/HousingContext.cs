@@ -1,10 +1,11 @@
 ﻿using Housing.Core.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using WebMaze.DbStuff.Model;
 
 namespace Housing.Infrastructure.Data
 {
-    public class ModelContext : DbContext
+    public class HousingContext : DbContext
     {
         public DbSet<CitizenUser> Users { get; set; }
         public DbSet<House> Houses { get; set; }
@@ -15,10 +16,9 @@ namespace Housing.Infrastructure.Data
         public DbSet<HousingOwnerRequest> HousingOwnerRequests { get; set; }
         public DbSet<HousingResidentRequest> HousingResidentRequests { get; set; }
 
-        public ModelContext(DbContextOptions<ModelContext> options) : base(options)
+        public HousingContext(DbContextOptions<HousingContext> options) : base(options)
         {
         }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<House>().HasOne(h => h.Owner).WithMany(o => o.Houses).OnDelete(DeleteBehavior.Cascade);
@@ -30,6 +30,10 @@ namespace Housing.Infrastructure.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<HousingOwner>().HasMany(o => o.OwnerRequests).WithOne(r => r.Owner);
             modelBuilder.Entity<HousingResident>().HasMany(o => o.ResidentRequests).WithOne(r => r.Resident);
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
         }
     }
 }

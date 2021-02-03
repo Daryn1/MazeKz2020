@@ -11,8 +11,8 @@ namespace Housing.Core.Models
         public string ExtraInfo { get; set; }
         public bool IsApplied { get; set; }
         public long HouseId { get; set; }
-        public House House { get; set; }
+        public virtual House House { get; set; }
         public long OwnerId { get; set; }
-        public HousingOwner Owner { get; set; }
+        public virtual HousingOwner Owner { get; set; }
     }
 }

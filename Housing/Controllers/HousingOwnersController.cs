@@ -33,7 +33,7 @@ namespace Housing.Controllers
             if (user.Password != userModel.Password) {
                 return RedirectToAction("Houses", "Housing", new { errorMessage = "Неправильный пароль или логин. Попробуйте еще раз" });
             }
-            var owner = new HousingOwner { UserId = userModel.Id, User = userModel };
+            var owner = new HousingOwner { UserId = userModel.Id, User = userModel, Balance = (double) userModel.Balance };
             if (!await _owners.HasEntity(owner)) owner = await _owners.Create(owner);
             else owner = await _owners.GetByLogin(user.Login);
             var identity = AuthentificationOptions.CreateIdentity(owner);

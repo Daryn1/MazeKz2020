@@ -14,8 +14,8 @@ namespace Housing.Infrastructure.Repositories
 {
     public class HousingOwnerRequestsRepository : ModelRepository<HousingOwnerRequest>, IHousingRequestsRepository<HousingOwnerRequest>
     {
-        private readonly ModelContext _context;
-        public HousingOwnerRequestsRepository(ModelContext context) : base(context)
+        private readonly HousingContext _context;
+        public HousingOwnerRequestsRepository(HousingContext context) : base(context)
         {
             _context = context;
         }
@@ -43,8 +43,12 @@ namespace Housing.Infrastructure.Repositories
 
         public async Task<ICollection<HousingOwnerRequest>> GetRequests(long houseId)
         {
-            return await _context.HousingOwnerRequests.AsNoTracking().Where(r => r.HouseId == houseId && r.IsApplied == false).Include(r => r.Owner).
-                ThenInclude(o => o.User).OrderByDescending(r => r.SentAt).
+            return await _context.HousingOwnerRequests.
+                //AsNoTracking().
+                Where(r => r.HouseId == houseId && r.IsApplied == false).
+               // Include(r => r.Owner).
+               // ThenInclude(o => o.User).
+                OrderByDescending(r => r.SentAt).
                 ToListAsync();
         }
 

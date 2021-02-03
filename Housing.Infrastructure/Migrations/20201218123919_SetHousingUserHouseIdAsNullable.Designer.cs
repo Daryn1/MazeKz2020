@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Housing.Infrastructure.Migrations
 {
-    [DbContext(typeof(ModelContext))]
+    [DbContext(typeof(HousingContext))]
     [Migration("20201218123919_SetHousingUserHouseIdAsNullable")]
     partial class SetHousingUserHouseIdAsNullable
     {

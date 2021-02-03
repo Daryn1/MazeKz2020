@@ -12,18 +12,21 @@ namespace Housing.Infrastructure.Repositories
 {
     public class HouseRepository : ModelRepository<House>, IHouseRepository
     {
-        public HouseRepository(ModelContext context) : base(context)
+        public HouseRepository(HousingContext context) : base(context)
         {
         }
 
         public override async Task<ICollection<House>> GetAll()
         {
-            return await Context.Houses.AsNoTracking().Where(h => h.IsSelling).ToListAsync();
+            return await Context.Houses.
+                //AsNoTracking().
+                Where(h => h.IsSelling).ToListAsync();
         }
         public override async Task<House> GetById(long id)
         {
-           return await Context.Houses.AsNoTracking().
-                Include(h => h.Owner).ThenInclude(o => o.User).
+           return await Context.Houses.
+                //AsNoTracking().
+                //Include(h => h.Owner).ThenInclude(o => o.User).
                 FirstOrDefaultAsync(o => o.HouseId == id);
         }
 
@@ -31,7 +34,8 @@ namespace Housing.Infrastructure.Repositories
         {
             bool hasPrice = house.Price != default, hasStreet = !string.IsNullOrEmpty(house.Street), 
                 hasType = house.Type != Core.Enums.HouseType.Ничего;
-            var filteredHouses = Context.Houses.AsNoTracking();
+            var filteredHouses = Context.Houses.AsQueryable();
+                //AsNoTracking();
             double bound = 5000000;
 
             if (hasPrice && hasStreet && hasType)

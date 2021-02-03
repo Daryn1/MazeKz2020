@@ -88,7 +88,7 @@ namespace Housing.Controllers
                 if (!page.HasValue)
                     ViewBag.Houses = _mapper.Map<ICollection<HouseDto>>(await _repos.GetAll());
                 else
-                    ViewBag.Houses = _mapper.Map<ICollection<HouseDto>>(await _repos.GetHousesByPage(page.Value, 6));
+                    ViewBag.Houses = _mapper.Map<ICollection<HouseDto>>(await _repos.GetHousesByPage(page.Value, 4));
             }
             return View();
         }

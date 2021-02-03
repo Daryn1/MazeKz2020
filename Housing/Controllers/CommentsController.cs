@@ -15,10 +15,10 @@ namespace Housing.Controllers
     [Authorize]
     public class CommentsController : Controller
     {
-        private readonly ICommentRepository _comments;
+        private readonly IHousingCommentRepository _comments;
         private readonly IHousingResidentRepository _housingUsers;
         private readonly IMapper _mapper;
-        public CommentsController(ICommentRepository comments, IMapper mapper, IHousingResidentRepository housingUsers)
+        public CommentsController(IHousingCommentRepository comments, IMapper mapper, IHousingResidentRepository housingUsers)
         {
             _comments = comments;
             _mapper = mapper;

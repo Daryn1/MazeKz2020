@@ -33,12 +33,12 @@ namespace Housing
             });
             services.RegisterAutoMapper();
             services.AddHousingRepositories();
-            services.AddDbContext<ModelContext>(options =>
+            services.AddDbContext<HousingContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
                 assembly => assembly.MigrationsAssembly("Housing.Infrastructure")));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
-                var path = new PathString("/HousingOwners/LoginUser");
+                var path = new PathString("/Housing/Houses");
                 options.LoginPath = path;
                 options.Cookie.Name = "User.Auth";
                 options.AccessDeniedPath = path;
@@ -71,7 +71,7 @@ namespace Housing
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}");
             });
         }
     }

@@ -16,11 +16,11 @@ namespace Housing.Extensions
         public static void AddHousingRepositories(this IServiceCollection services)
         {
             services.AddScoped<IHouseRepository, HouseRepository>();
-            services.AddScoped<ICommentRepository, CommentRepository>();
+            services.AddScoped<IHousingCommentRepository, HousingCommentRepository>();
             services.AddScoped<IHousingResidentRepository, HousingResidentRepository>();
             services.AddScoped<IHousingOwnerRepository, HousingOwnerRepository>();
             services.AddScoped<ICitizenUserRepository, CitizenUserRepository>();
-            services.AddScoped<ICartHouseRepository, CartHouseRepository>();
+            services.AddScoped<IHousingCartsRepository, HousingCartsRepository>();
             services.AddScoped<IHousingRequestsRepository<HousingOwnerRequest>,
                 HousingOwnerRequestsRepository>();
             services.AddScoped<IHousingRequestsRepository<HousingResidentRequest>,

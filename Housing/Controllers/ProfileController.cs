@@ -36,7 +36,7 @@ namespace Housing.Controllers
         [HttpPost("id={id}/update/balance")]
         public async Task<IActionResult> UpdateOwnerBalance(double balance, long id)
         {
-            if(balance == 0)
+            if(balance <= 0)
                 return RedirectToAction("ProfilePage", new { balanceError = "Баланс должен быть больше нуля" });
             var owner = await _owners.GetById(id);
             owner.Balance += balance;

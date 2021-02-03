@@ -9,10 +9,10 @@ namespace Housing.Core.Models
     {
         public long Id { get; set; }
         public long OwnerId { get; set; }
-        public HousingOwner Owner { get; set; }
+        public virtual HousingOwner Owner { get; set; }
         public long? HouseId { get; set; }
-        public House House { get; set; }
-        public List<Comment> Comments { get; set; }
-        public List<HousingResidentRequest> ResidentRequests { get; set; }
+        public virtual House House { get; set; }
+        public virtual List<Comment> Comments { get; set; }
+        public virtual List<HousingResidentRequest> ResidentRequests { get; set; }
     }
 }

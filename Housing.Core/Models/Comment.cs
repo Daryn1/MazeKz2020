@@ -11,8 +11,8 @@ namespace Housing.Core.Models
         public DateTime LeavedAt { get; set; }
         public string Text { get; set; }
         public long HouseId { get; set; }
-        public House House { get; set; }
+        public virtual House House { get; set; }
         public long UserId { get; set; }
-        public HousingResident User { get; set; }
+        public virtual HousingResident User { get; set; }
     }
 }
