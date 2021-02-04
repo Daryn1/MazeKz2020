@@ -11,13 +11,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Housing.Controllers
 {
-    [Route("{controller}/")]
+    [Route("Housing/Profile/")]
     [Authorize]
-    public class ProfileController : Controller
+    public class HousingProfileController : Controller
     {
         private readonly IHousingOwnerRepository _owners;
         private readonly IMapper _mapper;
-        public ProfileController(IHousingOwnerRepository owners, IMapper mapper)
+        public HousingProfileController(IHousingOwnerRepository owners, IMapper mapper)
         {
             _owners = owners;
             _mapper = mapper;

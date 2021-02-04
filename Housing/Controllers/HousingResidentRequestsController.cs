@@ -71,9 +71,9 @@ namespace Housing.Controllers
         public async Task<IActionResult> DeleteResidentRequestFromAction(long ownerId, long houseId)
         {
             var request = await _residentRequests.GetByIds(ownerId, houseId);
-            if (request == null) return RedirectToAction("ProfilePage", "Profile", new { requestDeleteError = "Запрос не найден" });
-            if (await _residentRequests.Delete(request)) return RedirectToAction("ProfilePage", "Profile");
-            return RedirectToAction("ProfilePage", "Profile", new { requestDeleteError = "Не удалось удалить запрос" });
+            if (request == null) return RedirectToAction("ProfilePage", "HousingProfile", new { requestDeleteError = "Запрос не найден" });
+            if (await _residentRequests.Delete(request)) return RedirectToAction("ProfilePage", "HousingProfile");
+            return RedirectToAction("ProfilePage", "HousingProfile", new { requestDeleteError = "Не удалось удалить запрос" });
         }
         [HttpPost("residentId={residentId}/houseId={houseId}/apply")]
         [Authorize]

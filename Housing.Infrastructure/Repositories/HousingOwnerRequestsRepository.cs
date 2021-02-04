@@ -44,10 +44,7 @@ namespace Housing.Infrastructure.Repositories
         public async Task<ICollection<HousingOwnerRequest>> GetRequests(long houseId)
         {
             return await _context.HousingOwnerRequests.
-                //AsNoTracking().
                 Where(r => r.HouseId == houseId && r.IsApplied == false).
-               // Include(r => r.Owner).
-               // ThenInclude(o => o.User).
                 OrderByDescending(r => r.SentAt).
                 ToListAsync();
         }
@@ -59,6 +56,7 @@ namespace Housing.Infrastructure.Repositories
             if (user.Balance < house.Price) return false;
             user.Balance -= house.Price;
             house.OwnerId = userId;
+            house.IsSelling = false;
             var request = await GetByIds(userId, houseId);
             request.IsApplied = true;
             return await _context.SaveChangesAsync() > 0;

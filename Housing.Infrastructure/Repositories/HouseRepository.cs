@@ -32,41 +32,47 @@ namespace Housing.Infrastructure.Repositories
 
         public async Task<ICollection<House>> GetFilteredHouses(FilteredHouseDto house)
         {
-            bool hasPrice = house.Price != default, hasStreet = !string.IsNullOrEmpty(house.Street), 
-                hasType = house.Type != Core.Enums.HouseType.Ничего;
             var filteredHouses = Context.Houses.AsQueryable();
-                //AsNoTracking();
-            double bound = 5000000;
-
-            if (hasPrice && hasStreet && hasType)
-                filteredHouses = filteredHouses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
-                (h.Price >= house.Price - bound && h.Price <= house.Price + bound) && h.Type == house.Type && h.IsSelling);
-
-            else if (hasPrice && hasType)
-                filteredHouses = filteredHouses.Where(h => (h.Price >= house.Price - bound && h.Price <= house.Price + bound) &&
-                h.Type == house.Type && h.IsSelling);
-
-            else if (hasStreet && hasType)
-                filteredHouses = filteredHouses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
-                h.Type == house.Type && h.IsSelling);
-
-            else if (hasPrice && hasStreet)
-                filteredHouses = filteredHouses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
-                (h.Price >= house.Price - bound && h.Price <= house.Price + bound) && h.IsSelling);
-
-            else if (hasPrice)
-                filteredHouses = filteredHouses.Where(h =>
-                (h.Price >= house.Price - bound && h.Price <= house.Price + bound) && h.IsSelling);
-
-            else if (hasStreet)
-                filteredHouses = filteredHouses.Where(h => EF.Functions.Like(h.Street, house.Street) && h.IsSelling);
-
-            else if (hasType)
-                filteredHouses = filteredHouses.Where(h => h.Type == house.Type && h.IsSelling);
-
+            if (!string.IsNullOrEmpty(house.Name))
+            {
+                filteredHouses = filteredHouses.
+                    Where(h => h.Name.Contains(house.Name.ToLower())).
+                    Union(filteredHouses.Where(h => h.Name.Contains(house.Name)));
+            }
             else
-                filteredHouses = filteredHouses.Where(h => h.IsSelling);
+            {
+                double bound = 5000000;
+                bool hasPrice = house.Price != default, hasStreet = !string.IsNullOrEmpty(house.Street),
+                hasType = house.Type != Core.Enums.HouseType.Ничего;
+                if (hasPrice && hasStreet && hasType)
+                    filteredHouses = filteredHouses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
+                    (h.Price >= house.Price - bound && h.Price <= house.Price + bound) && h.Type == house.Type && h.IsSelling);
 
+                else if (hasPrice && hasType)
+                    filteredHouses = filteredHouses.Where(h => (h.Price >= house.Price - bound && h.Price <= house.Price + bound) &&
+                    h.Type == house.Type && h.IsSelling);
+
+                else if (hasStreet && hasType)
+                    filteredHouses = filteredHouses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
+                    h.Type == house.Type && h.IsSelling);
+
+                else if (hasPrice && hasStreet)
+                    filteredHouses = filteredHouses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
+                    (h.Price >= house.Price - bound && h.Price <= house.Price + bound) && h.IsSelling);
+
+                else if (hasPrice)
+                    filteredHouses = filteredHouses.Where(h =>
+                    (h.Price >= house.Price - bound && h.Price <= house.Price + bound) && h.IsSelling);
+
+                else if (hasStreet)
+                    filteredHouses = filteredHouses.Where(h => EF.Functions.Like(h.Street, house.Street) && h.IsSelling);
+
+                else if (hasType)
+                    filteredHouses = filteredHouses.Where(h => h.Type == house.Type && h.IsSelling);
+
+                else
+                    filteredHouses = filteredHouses.Where(h => h.IsSelling);
+            }
            return await filteredHouses.ToListAsync();
         }
 

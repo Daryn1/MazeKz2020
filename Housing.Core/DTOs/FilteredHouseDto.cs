@@ -10,6 +10,8 @@ namespace Housing.Core.DTOs
         public double Price { get; set; }
         public HouseType Type { get; set; }
         public string Street { get; set; }
-        public bool HasAllDefaultValues() => Price == default && Type == HouseType.Ничего && Street == default;
+        public string Name { get; set; }
+        public bool HasAllDefaultValues() => Price == default && Type == HouseType.Ничего &&
+            Street == default && Name == default;
     }
 }

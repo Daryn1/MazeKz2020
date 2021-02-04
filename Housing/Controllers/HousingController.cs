@@ -57,12 +57,12 @@ namespace Housing.Controllers
             if (!ModelState.IsValid)
             {
                 error = "Заполните все поля";
-                return RedirectToAction("ProfilePage", "Profile", new { error });
+                return RedirectToAction("ProfilePage", "HousingProfile", new { error });
             }
             if(house.Type == HouseType.Ничего)
             {
                 error = "Выберите тип недвижимости";
-                return RedirectToAction("ProfilePage", "Profile", new { error });
+                return RedirectToAction("ProfilePage", "HousingProfile", new { error });
             }
             string houseImagePath = "/HouseImages/" + house.ImageFile.FileName;
             house.ImagePath = houseImagePath;
@@ -74,7 +74,7 @@ namespace Housing.Controllers
             houseModel.OwnerId = long.Parse(HttpContext.Session.GetString("Id"));
             if (await _repos.Create(houseModel) != null) return RedirectToAction("ProfilePage", "Profile");
             error = "Не удалось опубликовать недвижимость";
-            return RedirectToAction("ProfilePage", "Profile", new { error });
+            return RedirectToAction("ProfilePage", "HousingProfile", new { error });
         }
         public async Task<IActionResult> Houses(string errorMessage, FilteredHouseDto house, int? page)
         {
@@ -92,7 +92,7 @@ namespace Housing.Controllers
             }
             return View();
         }
-        [Route("/Housing/Houses/id={id}")]
+        [HttpGet("/Housing/Houses/id={id}")]
         public async Task<IActionResult> HousePage(long id, string errorMessage, string cartError, string requestError)
         {
            var house = await _repos.GetById(id);
@@ -194,18 +194,18 @@ namespace Housing.Controllers
             if(house.OwnerId == ownerId)
             {
                 house.IsSelling = isSelling;
-                if (await _repos.Update(house)) return RedirectToAction("ProfilePage", "Profile");
+                if (await _repos.Update(house)) return RedirectToAction("ProfilePage", "HousingProfile");
             }
-            return RedirectToAction("ProfilePage", "Profile", new { statusError = "Не удалось сменить статус" });
+            return RedirectToAction("ProfilePage", "HousingProfile", new { statusError = "Не удалось сменить статус" });
         }
 
         [HttpPost("/Housing/Houses/id={id}/delete")]
         [Authorize]
         public async Task<IActionResult> DeleteHouseAsync(long id)
         {
-            if (await _repos.DeleteById(id)) return RedirectToAction("ProfilePage", "Profile");
+            if (await _repos.DeleteById(id)) return RedirectToAction("ProfilePage", "HousingProfile");
             string deleteError = "Не удалось удалить недвижимость";
-            return RedirectToAction("ProfilePage", "Profile", new { deleteError });
+            return RedirectToAction("ProfilePage", "HousingProfile", new { deleteError });
         }
     }
 }
