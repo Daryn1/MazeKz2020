@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebMaze.DbStuff.Model;
 
 namespace Housing.Infrastructure.Repositories
 {
@@ -19,42 +20,22 @@ namespace Housing.Infrastructure.Repositories
         }
         public override async Task<HousingOwner> Create(HousingOwner model)
         {
-            Context.HouseOwners.Add(model);
-            if (await Context.SaveChangesAsync() > 0)
-            {
-                HousingResident user = new HousingResident { OwnerId = model.Id, HouseId = null };
-                Context.HouseResidents.Add(user);
-                await Context.SaveChangesAsync();
-            }
+            model = await base.Create(model);
+            //???? Lazy loading not works 
+            model.User = await Context.Users.Select(u => new CitizenUser 
+            { Login = u.Login, Id = u.Id, AvatarUrl = u.AvatarUrl, PhoneNumber = u.PhoneNumber }).FirstAsync(u => u.Id == model.UserId);
             return model;
         }
         public override async Task<HousingOwner> GetById(long id)
         {
-            return await Context.HouseOwners.
-                //AsNoTracking().
-                //Include(o => o.User).
-                //Include(o => o.Houses).
-               // Include(o => o.HousingUser).ThenInclude(u => u.ResidentRequests).ThenInclude(r => r.House).
-               // Include(o => o.CartHouses).ThenInclude(c => c.House).
-                /*Include(o => o.OwnerRequests).ThenInclude(r => r.House).Select(o =>
-                {
-                    o.User = new WebMaze.DbStuff.Model.CitizenUser
-                    {
-                        Login = o.User.Login,
-                        Password = o.User.Password,
-                        Balance = o.User.Balance,
-                        AvatarUrl = o.User.AvatarUrl
-                    };
-                    return o;
-                }).*/
-                FirstOrDefaultAsync(o => o.Id == id);
+            var model = await base.GetById(id);
+            model.HousingUser = await Context.HouseResidents.FirstAsync(u => u.OwnerId == id);
+            return model;
         }
 
         public async Task<HousingOwner> GetByLogin(string login)
         {
            return await Context.HouseOwners.
-               // AsNoTracking().
-               // Include(o => o.User).
                 FirstOrDefaultAsync(o => o.User.Login.Equals(login));
         }
 

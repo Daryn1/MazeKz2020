@@ -38,8 +38,7 @@ namespace Housing.Infrastructure.Repositories
         public virtual async Task<bool> DeleteById(long id)
         {
             var model = await GetById(id);
-            Context.Set<T>().Remove(model);
-            return await Context.SaveChangesAsync() > 0;
+            return await Delete(model);
         }
 
         public virtual async Task<T> GetById(long id)

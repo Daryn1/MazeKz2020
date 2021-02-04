@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Housing.Core.Helpers;
 using Housing.Core.Interfaces.Repositories;
+using Housing.Core.Interfaces.Services;
 using Housing.Core.Models;
 using Housing.Infrastructure.Repositories;
+using Housing.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Housing.Extensions
@@ -10,7 +12,7 @@ namespace Housing.Extensions
     public static class ServicesExtensions
     {
         /// <summary>
-        /// Добавление зависимостей репозиториев жилищной системы
+        /// Add data repositories for housing system
         /// </summary>
         /// <param name="services"></param>
         public static void AddHousingRepositories(this IServiceCollection services)
@@ -32,6 +34,21 @@ namespace Housing.Extensions
             var mapperConfig = new MapperConfiguration(mc => mc.AddProfile(new MapperProfiles()));
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+        }
+        /// <summary>
+        /// Add interactor services for housing system
+        /// </summary>
+        /// <param name="services"></param>
+        public static void AddHousingInteractors(this IServiceCollection services)
+        {
+            services.AddScoped<IHouseService, HouseService>();
+            services.AddScoped<IHousingCommentService, HousingCommentService>();
+            services.AddScoped<IHousingOwnerService, HousingOwnerService>();
+            services.AddScoped<IHousingCartService, HousingCartService>();
+            services.AddScoped<IHousingRequestService<HousingOwnerRequest>,
+                HousingOwnerRequestService>();
+            services.AddScoped<IHousingRequestService<HousingResidentRequest>,
+                HousingResidentRequestService>();
         }
     }
 }

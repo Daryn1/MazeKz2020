@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Housing.Core.DTOs;
 using Housing.Core.Interfaces.Repositories;
+using Housing.Core.Interfaces.Services;
 using Housing.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,9 +17,9 @@ namespace Housing.Controllers
     [ApiController]
     public class HousingResidentRequestsController : ControllerBase
     {
-        private readonly IHousingRequestsRepository<HousingResidentRequest> _residentRequests;
+        private readonly IHousingRequestService<HousingResidentRequest> _residentRequests;
         private readonly IMapper _mapper;
-        public HousingResidentRequestsController(IHousingRequestsRepository<HousingResidentRequest> residentRequests, IMapper mapper)
+        public HousingResidentRequestsController(IHousingRequestService<HousingResidentRequest> residentRequests, IMapper mapper)
         {
             _residentRequests = residentRequests;
             _mapper = mapper;

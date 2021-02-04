@@ -19,17 +19,6 @@ namespace Housing.Infrastructure.Repositories
         {
             _context = context;
         }
-        public override async Task<HousingOwnerRequest> Create(HousingOwnerRequest request)
-        {
-            _context.HousingOwnerRequests.Add(request);
-            await _context.SaveChangesAsync();
-            return request;
-        }
-        public override async Task<bool> Delete(HousingOwnerRequest request)
-        {
-            _context.HousingOwnerRequests.Remove(request);
-            return await _context.SaveChangesAsync() > 0;
-        }
 
         public async Task<HousingOwnerRequest> GetByIds(long userId, long houseId)
         {
@@ -47,19 +36,6 @@ namespace Housing.Infrastructure.Repositories
                 Where(r => r.HouseId == houseId && r.IsApplied == false).
                 OrderByDescending(r => r.SentAt).
                 ToListAsync();
-        }
-
-        public async Task<bool> ApplyRequest(long userId, long houseId)
-        {
-            var house = await _context.Houses.FindAsync(houseId);
-            var user = await _context.HouseOwners.FindAsync(userId);
-            if (user.Balance < house.Price) return false;
-            user.Balance -= house.Price;
-            house.OwnerId = userId;
-            house.IsSelling = false;
-            var request = await GetByIds(userId, houseId);
-            request.IsApplied = true;
-            return await _context.SaveChangesAsync() > 0;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Housing.Core.DTOs;
+using Housing.Core.Enums;
 using Housing.Core.Interfaces.Repositories;
 using Housing.Core.Models;
 using Housing.Infrastructure.Data;
@@ -19,15 +20,7 @@ namespace Housing.Infrastructure.Repositories
         public override async Task<ICollection<House>> GetAll()
         {
             return await Context.Houses.
-                //AsNoTracking().
                 Where(h => h.IsSelling).ToListAsync();
-        }
-        public override async Task<House> GetById(long id)
-        {
-           return await Context.Houses.
-                //AsNoTracking().
-                //Include(h => h.Owner).ThenInclude(o => o.User).
-                FirstOrDefaultAsync(o => o.HouseId == id);
         }
 
         public async Task<ICollection<House>> GetFilteredHouses(FilteredHouseDto house)
@@ -43,7 +36,7 @@ namespace Housing.Infrastructure.Repositories
             {
                 double bound = 5000000;
                 bool hasPrice = house.Price != default, hasStreet = !string.IsNullOrEmpty(house.Street),
-                hasType = house.Type != Core.Enums.HouseType.Ничего;
+                hasType = house.Type != HouseType.Ничего;
                 if (hasPrice && hasStreet && hasType)
                     filteredHouses = filteredHouses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
                     (h.Price >= house.Price - bound && h.Price <= house.Price + bound) && h.Type == house.Type && h.IsSelling);
@@ -76,10 +69,30 @@ namespace Housing.Infrastructure.Repositories
            return await filteredHouses.ToListAsync();
         }
 
+        public async Task<ICollection<House>> GetHousesByName(string name)
+        {
+            return await Context.Houses.Where(h => h.Name == name).ToListAsync();
+        }
+
         public async Task<ICollection<House>> GetHousesByPage(int page, int countPerPage)
         {
             return await Context.Houses.Where(h => h.IsSelling).OrderBy(h => h.HouseId).
                 Skip((page - 1) * countPerPage).Take(countPerPage).ToListAsync();
+        }
+
+        public async Task<ICollection<House>> GetHousesByPrice(double price)
+        {
+            return await Context.Houses.Where(h => h.Price == price).ToListAsync();
+        }
+
+        public async Task<ICollection<House>> GetHousesByStreet(string street)
+        {
+            return await Context.Houses.Where(h => h.Street == street).ToListAsync();
+        }
+
+        public async Task<ICollection<House>> GetHousesByType(HouseType type)
+        {
+            return await Context.Houses.Where(h => h.Type == type).ToListAsync();
         }
 
         public async Task<int> GetHousesCount()

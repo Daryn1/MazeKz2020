@@ -18,19 +18,9 @@ namespace Housing.Infrastructure.Repositories
         {
         }
 
-        public override async Task<HousingResident> GetById(long id)
+        public async Task<HousingResident> GetByOwnerId(long ownerId)
         {
-            return await Context.HouseResidents.
-                //AsNoTracking().
-               // Include(r => r.House).Include(r => r.Owner).
-                FirstOrDefaultAsync(r => r.OwnerId == id);
-        }
-
-        public override async Task<ICollection<HousingResident>> GetAll()
-        {
-           return await Context.HouseResidents
-                //.AsNoTracking().Include(r => r.House).Include(r => r.Owner)
-                .ToListAsync();
+            return await Context.HouseResidents.FirstOrDefaultAsync(r => r.OwnerId == ownerId);
         }
     }
 }

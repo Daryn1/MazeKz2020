@@ -24,9 +24,7 @@ namespace Housing.Infrastructure.Repositories
         public async Task<CartHouse> GetFromCartByIds(long ownerId, long houseId)
         {
             return await _context.HouseCarts.
-                //Include(c => c.House).
-                FirstOrDefaultAsync(c => c.OwnerId == ownerId
-            && c.HouseId == houseId);
+                FirstOrDefaultAsync(c => c.OwnerId == ownerId && c.HouseId == houseId);
         }
         public override async Task<bool> HasEntity(CartHouse model)
         {

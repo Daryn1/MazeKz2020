@@ -7,6 +7,7 @@ using AutoMapper;
 using Housing.Core.DTOs;
 using Housing.Core.Enums;
 using Housing.Core.Interfaces.Repositories;
+using Housing.Core.Interfaces.Services;
 using Housing.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -19,12 +20,12 @@ namespace Housing.Controllers
     [Controller]
     public class HousingController : Controller
     {
-        private readonly IHouseRepository _repos;
+        private readonly IHouseService _houses;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _environment;
-        public HousingController(IHouseRepository repos, IMapper mapper, IWebHostEnvironment environment)
+        public HousingController(IHouseService houses, IMapper mapper, IWebHostEnvironment environment)
         {
-            _repos = repos;
+            _houses = houses;
             _mapper = mapper;
             _environment = environment;
         }
@@ -35,18 +36,18 @@ namespace Housing.Controllers
         [HttpGet("/housing/houses/maxprice")]
         public async Task<double> GetMaxHousePrice()
         {
-            return await _repos.GetMaxHousePrice();
+            return await _houses.GetMaxHousePrice();
         }
         [HttpGet("/housing/houses/minprice")]
         public async Task<double> GetMinHousePrice()
         {
-            return await _repos.GetMinHousePrice();
+            return await _houses.GetMinHousePrice();
         }
 
         [HttpGet("/housing/houses/count")]
         public async Task<int> GetHousesCount()
         {
-            return await _repos.GetHousesCount();
+            return await _houses.GetHousesCount();
         }
 
         [HttpPost]
@@ -72,7 +73,7 @@ namespace Housing.Controllers
             }
             var houseModel = _mapper.Map<House>(house);
             houseModel.OwnerId = long.Parse(HttpContext.Session.GetString("Id"));
-            if (await _repos.Create(houseModel) != null) return RedirectToAction("ProfilePage", "Profile");
+            if (await _houses.Create(houseModel) != null) return RedirectToAction("ProfilePage", "HousingProfile");
             error = "Не удалось опубликовать недвижимость";
             return RedirectToAction("ProfilePage", "HousingProfile", new { error });
         }
@@ -80,22 +81,22 @@ namespace Housing.Controllers
         {
             if (!house.HasAllDefaultValues())
             {
-                ViewBag.Houses = _mapper.Map<ICollection<HouseDto>>(await _repos.GetFilteredHouses(house));
+                ViewBag.Houses = _mapper.Map<ICollection<HouseDto>>(await _houses.GetFilteredHouses(house));
             }
             else
             {
                 ViewBag.LoginErrorMessage = errorMessage;
                 if (!page.HasValue)
-                    ViewBag.Houses = _mapper.Map<ICollection<HouseDto>>(await _repos.GetAll());
+                    ViewBag.Houses = _mapper.Map<ICollection<HouseDto>>(await _houses.GetAll());
                 else
-                    ViewBag.Houses = _mapper.Map<ICollection<HouseDto>>(await _repos.GetHousesByPage(page.Value, 4));
+                    ViewBag.Houses = _mapper.Map<ICollection<HouseDto>>(await _houses.GetHousesByPage(page.Value, 4));
             }
             return View();
         }
         [HttpGet("/Housing/Houses/id={id}")]
         public async Task<IActionResult> HousePage(long id, string errorMessage, string cartError, string requestError)
         {
-           var house = await _repos.GetById(id);
+           var house = await _houses.GetById(id);
             ViewBag.UpdateHouseErrorMessage = errorMessage;
             ViewBag.CartError = cartError;
             ViewBag.RequestError = requestError;
@@ -108,9 +109,9 @@ namespace Housing.Controllers
         {
             if (!string.IsNullOrEmpty(houseName))
             {
-                var house = await _repos.GetById(id);
+                var house = await _houses.GetById(id);
                 house.Name = houseName;
-                if (await _repos.Update(house)) return Redirect("/Housing/Houses/id=" + id);
+                if (await _houses.Update(house)) return Redirect("/Housing/Houses/id=" + id);
             }
             return RedirectToAction("HousePage", "Housing", new { id, errorMessage = "Не удалось обновить название" });
         }
@@ -121,9 +122,9 @@ namespace Housing.Controllers
         {
             if (!string.IsNullOrEmpty(houseStreet))
             {
-                var house = await _repos.GetById(id);
+                var house = await _houses.GetById(id);
                 house.Street = houseStreet;
-                if (await _repos.Update(house)) return Redirect("/Housing/Houses/id=" + id);
+                if (await _houses.Update(house)) return Redirect("/Housing/Houses/id=" + id);
             }
             return RedirectToAction("HousePage", "Housing", new { id, errorMessage = "Не удалось обновить улицу" });
         }
@@ -134,9 +135,9 @@ namespace Housing.Controllers
         {
             if (!string.IsNullOrEmpty(houseInfo))
             {
-                var house = await _repos.GetById(id);
+                var house = await _houses.GetById(id);
                 house.Info = houseInfo;
-                if (await _repos.Update(house)) return Redirect("/Housing/Houses/id=" + id);
+                if (await _houses.Update(house)) return Redirect("/Housing/Houses/id=" + id);
             }
             return RedirectToAction("HousePage", "Housing", new { id, errorMessage = "Не удалось обновить информацию" });
         }
@@ -147,9 +148,9 @@ namespace Housing.Controllers
         {
             if (housePrice != default)
             {
-                var house = await _repos.GetById(id);
+                var house = await _houses.GetById(id);
                 house.Price = housePrice;
-                if (await _repos.Update(house)) return Redirect("/Housing/Houses/id=" + id);
+                if (await _houses.Update(house)) return Redirect("/Housing/Houses/id=" + id);
             }
             return RedirectToAction("HousePage", "Housing", new { id, errorMessage = "Не удалось обновить стоимость" });
         }
@@ -160,9 +161,9 @@ namespace Housing.Controllers
         {
             if (houseType != default)
             {
-                var house = await _repos.GetById(id);
+                var house = await _houses.GetById(id);
                 house.Type = (HouseType)Enum.Parse(typeof(HouseType), houseType);
-                if (await _repos.Update(house)) return Redirect("/Housing/Houses/id=" + id);
+                if (await _houses.Update(house)) return Redirect("/Housing/Houses/id=" + id);
             }
             return RedirectToAction("HousePage", "Housing", new { id, errorMessage = "Не удалось обновить стоимость" });
         }
@@ -173,7 +174,7 @@ namespace Housing.Controllers
         {
             if(houseFile != null)
             {
-                var house = await _repos.GetById(id);
+                var house = await _houses.GetById(id);
                 var newHouseImagePath = "/HouseImages/" + houseFile.FileName;
                 System.IO.File.Delete(_environment.WebRootPath + house.ImagePath);
                 using(var stream = new FileStream(_environment.WebRootPath + newHouseImagePath, FileMode.Create))
@@ -181,7 +182,7 @@ namespace Housing.Controllers
                     await houseFile.CopyToAsync(stream);
                 }
                 house.ImagePath = newHouseImagePath;
-                if(await _repos.Update(house)) return Redirect("/Housing/Houses/id=" + id);
+                if(await _houses.Update(house)) return Redirect("/Housing/Houses/id=" + id);
             }
             return RedirectToAction("HousePage", "Housing", new { id, errorMessage = "Не удалось обновить стоимость" });
         }
@@ -190,11 +191,11 @@ namespace Housing.Controllers
         [Authorize]
         public async Task<IActionResult> SetHouseStatus(long ownerId, long houseId, bool isSelling)
         {
-            var house = await _repos.GetById(houseId);
+            var house = await _houses.GetById(houseId);
             if(house.OwnerId == ownerId)
             {
                 house.IsSelling = isSelling;
-                if (await _repos.Update(house)) return RedirectToAction("ProfilePage", "HousingProfile");
+                if (await _houses.Update(house)) return RedirectToAction("ProfilePage", "HousingProfile");
             }
             return RedirectToAction("ProfilePage", "HousingProfile", new { statusError = "Не удалось сменить статус" });
         }
@@ -203,7 +204,7 @@ namespace Housing.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteHouseAsync(long id)
         {
-            if (await _repos.DeleteById(id)) return RedirectToAction("ProfilePage", "HousingProfile");
+            if (await _houses.DeleteById(id)) return RedirectToAction("ProfilePage", "HousingProfile");
             string deleteError = "Не удалось удалить недвижимость";
             return RedirectToAction("ProfilePage", "HousingProfile", new { deleteError });
         }

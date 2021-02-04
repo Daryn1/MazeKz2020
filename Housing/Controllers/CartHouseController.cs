@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Housing.Core.Interfaces.Repositories;
+using Housing.Core.Interfaces.Services;
 using Housing.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +15,8 @@ namespace Housing.Controllers
     [Authorize]
     public class CartHouseController : Controller
     {
-        private readonly IHousingCartsRepository _carts;
-        public CartHouseController(IHousingCartsRepository carts)
+        private readonly IHousingCartService _carts;
+        public CartHouseController(IHousingCartService carts)
         {
             _carts = carts;
         }

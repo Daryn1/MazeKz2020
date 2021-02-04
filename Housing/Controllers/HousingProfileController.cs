@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Housing.Core.DTOs;
 using Housing.Core.Interfaces.Repositories;
+using Housing.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,9 +16,9 @@ namespace Housing.Controllers
     [Authorize]
     public class HousingProfileController : Controller
     {
-        private readonly IHousingOwnerRepository _owners;
+        private readonly IHousingOwnerService _owners;
         private readonly IMapper _mapper;
-        public HousingProfileController(IHousingOwnerRepository owners, IMapper mapper)
+        public HousingProfileController(IHousingOwnerService owners, IMapper mapper)
         {
             _owners = owners;
             _mapper = mapper;

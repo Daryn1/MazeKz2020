@@ -33,6 +33,7 @@ namespace Housing
             });
             services.RegisterAutoMapper();
             services.AddHousingRepositories();
+            services.AddHousingInteractors();
             services.AddDbContext<HousingContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
                 assembly => assembly.MigrationsAssembly("Housing.Infrastructure")));

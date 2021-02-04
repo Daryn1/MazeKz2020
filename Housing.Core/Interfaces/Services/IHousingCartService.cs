@@ -1,13 +1,12 @@
-﻿using Housing.Core.DTOs;
-using Housing.Core.Models;
+﻿using Housing.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Housing.Core.Interfaces.Repositories
+namespace Housing.Core.Interfaces.Services
 {
-    public interface IHousingCartsRepository : IModelRepository<CartHouse>
+    public interface IHousingCartService : IModelService<CartHouse>
     {
         Task<CartHouse> GetFromCartByIds(long ownerId, long houseId);
     }
