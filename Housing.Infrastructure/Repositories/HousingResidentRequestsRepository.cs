@@ -29,7 +29,15 @@ namespace Housing.Infrastructure.Repositories
         {
             return await _context.HousingResidentRequests.AnyAsync(r => r.HouseId == request.HouseId && r.Resident.OwnerId == request.ResidentId);
         }
-
+        public override async Task<bool> Update(HousingResidentRequest model)
+        {
+            if (model.IsApplied)
+            {
+                var house = await Context.Houses.FindAsync(model.HouseId);
+                house.MaxResidentsCount++;
+            }
+            return await base.Update(model);
+        }
         public async Task<ICollection<HousingResidentRequest>> GetRequests(long houseId)
         {
             return await _context.HousingResidentRequests.

@@ -24,6 +24,9 @@
                             <a class="nav-link" id="myhouses-tab" data-toggle="tab" href="#myhouses" role="tab" aria-controls="myhouses" aria-selected="false">Моя недвижимость</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" id="livingplace-tab" data-toggle="tab" href="#livingplace" role="tab" aria-controls="livingplace" aria-selected="false">Место проживания</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Добавить недвижимость</a>
                         </li>
                         <li class="nav-item">
@@ -104,9 +107,9 @@
                                         }
                                         else
                                         {
-                                                <form method="post" action="/Housing/Houses/id=@house.HouseId/ownerId=@house.OwnerId/status=true">
-                                                    <button class="btn btn-warning btn-sm">Выставить на продажу</button>
-                                                </form>
+                                            <form method="post" action="/Housing/Houses/id=@house.HouseId/ownerId=@house.OwnerId/status=true">
+                                                <button class="btn btn-warning btn-sm">Выставить на продажу</button>
+                                            </form>
                                         }
                                     }
                                     <h5 class="card-title">@house.Name</h5>
@@ -115,8 +118,30 @@
                                     <a href="/Housing/Houses/id=@house.HouseId" class="btn btn-primary">Узнать больше</a>
                                 </div>
                             </div>
-                            count++;
-                        }
+                                            count++;
+                                        }
+                    </div>
+                    <div class="tab-pane fade" id="livingplace" role="tabpanel" aria-labelledby="livingplace-tab">
+                        <div class="card">
+                            <h5 class="card-header">Место проживания</h5>
+                            @{ 
+                                var livingHouse = Model.HousingUser.House;
+                                if (livingHouse != null)
+                                {
+                                    <div class="card-body">
+                                        <h5 class="card-title">@livingHouse.Name</h5>
+                                        <p class="card-text text-primary">@Enum.GetName(typeof(HouseType), livingHouse.Type)</p>
+                                        <a href="/Housing/Houses/id=@livingHouse.HouseId" class="btn btn-primary">Узнать больше</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="card-body">
+                                        <h1 class="text-danger display-4">Вы пока не имеете места жительства.</h1>
+                                    </div>
+                                }
+                              }
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="cart" role="tabpanel" aria-labelledby="cart-tab">
                         @{

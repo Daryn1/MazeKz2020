@@ -27,5 +27,6 @@ namespace Housing.Core.DTOs
         public long OwnerId { get; set; }
         public HousingOwnerDto Owner { get; set; }
         public List<CommentDto> Comments { get; set; }
+        public int MaxResidentsCount { get; set; }
     }
 }

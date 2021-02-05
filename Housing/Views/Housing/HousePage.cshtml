@@ -69,7 +69,7 @@
                 </p>
                 <p class="list-group-item list-group-item-action">Тип: <span class="badge badge-primary">@Enum.GetName(typeof(HouseType), (Model.Type))</span></p>
                 <p class="list-group-item list-group-item-action">Улица: <span class="badge badge-warning">@Model.Street</span></p>
-                <p class="list-group-item list-group-item-action">Количество жителей: <span class="badge badge-info">0</span></p>
+                <p class="list-group-item list-group-item-action">Количество жителей: <span class="badge badge-info">@Model.MaxResidentsCount</span></p>
                 <p class="list-group-item list-group-item-action">Стоимость: <span class="badge badge-success">@Model.Price KZT</span></p>
             </div>
 
