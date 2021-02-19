@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -13,6 +14,7 @@ namespace Housing.Infrastructure.Repositories
 {
     public class HouseRepository : ModelRepository<House>, IHouseRepository
     {
+
         public HouseRepository(HousingContext context) : base(context)
         {
         }
@@ -38,33 +40,42 @@ namespace Housing.Infrastructure.Repositories
                 bool hasPrice = house.Price != default, hasStreet = !string.IsNullOrEmpty(house.Street),
                 hasType = house.Type != HouseType.Ничего;
                 if (hasPrice && hasStreet && hasType)
+                {
                     filteredHouses = filteredHouses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
                     (h.Price >= house.Price - bound && h.Price <= house.Price + bound) && h.Type == house.Type && h.IsSelling);
-
+                }
                 else if (hasPrice && hasType)
+                {
                     filteredHouses = filteredHouses.Where(h => (h.Price >= house.Price - bound && h.Price <= house.Price + bound) &&
                     h.Type == house.Type && h.IsSelling);
-
+                }
                 else if (hasStreet && hasType)
+                {
                     filteredHouses = filteredHouses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
                     h.Type == house.Type && h.IsSelling);
-
+                }
                 else if (hasPrice && hasStreet)
+                {
                     filteredHouses = filteredHouses.Where(h => EF.Functions.Like(h.Street, house.Street) &&
                     (h.Price >= house.Price - bound && h.Price <= house.Price + bound) && h.IsSelling);
-
+                }
                 else if (hasPrice)
+                {
                     filteredHouses = filteredHouses.Where(h =>
                     (h.Price >= house.Price - bound && h.Price <= house.Price + bound) && h.IsSelling);
-
+                }
                 else if (hasStreet)
+                {
                     filteredHouses = filteredHouses.Where(h => EF.Functions.Like(h.Street, house.Street) && h.IsSelling);
-
+                }
                 else if (hasType)
+                {
                     filteredHouses = filteredHouses.Where(h => h.Type == house.Type && h.IsSelling);
-
+                }
                 else
+                {
                     filteredHouses = filteredHouses.Where(h => h.IsSelling);
+                }
             }
            return await filteredHouses.ToListAsync();
         }
@@ -82,11 +93,13 @@ namespace Housing.Infrastructure.Repositories
 
         public async Task<ICollection<House>> GetHousesByPrice(double price)
         {
+
             return await Context.Houses.Where(h => h.Price == price).ToListAsync();
         }
 
         public async Task<ICollection<House>> GetHousesByStreet(string street)
         {
+
             return await Context.Houses.Where(h => h.Street == street).ToListAsync();
         }
 
