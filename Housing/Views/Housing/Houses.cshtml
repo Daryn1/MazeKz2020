@@ -1,0 +1,39 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Houses";
+}
+<div class="col-lg-9">
+    <h1 class="display-4 house-list-title">Список недвижимости</h1>
+
+    <div class="house-list row">
+        @if (ViewBag.Houses != null)
+        {
+            foreach (var house in ViewBag.Houses)
+            {
+                <div class="card col-md-4 house">
+                    <img class="card-img-top img-fluid" src="@house.ImagePath" alt="House image">
+                    <div class="card-body">
+                        <h4 class="card-title">@house.Name</h4>
+                        <p class="badge badge-success">@house.Price KZT</p>
+                        <a href="/Housing/Houses/id=@house.HouseId" class="btn btn-primary">Узнать больше</a>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center pagination-lg">
+        </ul>
+    </nav>
+    <script>
+        loadHousePages();
+    </script>
+</div>
+
+<div class="col-lg-3">
+
+    <!--Login page-->
+    @await Html.PartialAsync("../HousingProfile/LoginForm", new CitizenUserDto()) 
+
+    @await Html.PartialAsync("FilterForm", new FilteredHouseDto()) 
+</div>

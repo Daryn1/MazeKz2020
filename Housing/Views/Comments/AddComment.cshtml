@@ -1,0 +1,13 @@
+﻿@model CommentDto
+@inject IHttpContextAccessor HttpContextAccessor
+<form method="post" asp-controller="Comments" asp-action="AddComment">
+    @Html.HiddenFor(m => m.HouseId)
+    @Html.HiddenFor(m => m.UserId)
+    <div class="form-group">
+        <label for="comment">Добавить комментарий</label>
+        <textarea asp-for="@Model.Text" class="form-control" id="comment" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </div>
+</form>

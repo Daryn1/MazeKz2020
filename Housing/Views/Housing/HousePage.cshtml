@@ -1,0 +1,95 @@
+﻿@model HouseDto
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = Model.Name;
+    var houseComments = new HouseComments
+    {
+        HouseId = Model.HouseId,
+        House = Model,
+        Comments = Model.Comments
+    };
+    var ownerId = HttpContextAccessor.HttpContext.Session.GetString("Id");
+}
+<script>
+        let houseId = '@Model.HouseId';
+    let ownerId = '@ownerId';
+    if (ownerId !== null || ownerId !== '') {
+        if (ownerId !== '@Model.OwnerId') {
+            checkCartHouse(ownerId, houseId);
+            appendOwnerRequestForms(ownerId, houseId);
+            appendResidentRequestForms(ownerId, houseId);
+        } else {
+            loadOwnerRequests(houseId);
+            loadResidentRequests(houseId);
+        }
+    }
+</script>
+
+<div class="house-block container-fluid">
+    <div class="card house">
+        <img class="card-img-top img-fluid" src="@Model.ImagePath" alt="Card image">
+        <div class="card-body">
+            @if (HttpContextAccessor.HttpContext.Session.GetString("Id") == Model.Owner.Id.ToString())
+            {
+                @await Html.PartialAsync("UpdateHouseForm")
+            }
+            <span class="badge badge-danger">@ViewBag.CartError</span>
+            <span class="carthouse"></span>
+            <div class="houseRequests" style="margin-top: 20px;">
+                <span class="badge badge-danger houseRequestError"></span>
+                @if (ownerId == Model.OwnerId.ToString())
+                {
+                    <h3 class="text-danger">@ViewBag.RequestError</h3>
+                <div class="row">
+                    <div class="dropdown col-md-3">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="ownersRequestsButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Заявки на покупку</button>
+                        <div class="dropdown-menu ownersRequests" aria-labelledby="ownersRequestsButton">
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                    <div class="dropdown col-md-3">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="residentsRequestsButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Заявки на жительство</button>
+                        <div class="dropdown-menu residentsRequests" aria-labelledby="residentsRequestsButton">
+                        </div>
+                    </div>
+                </div>
+                    
+                }
+            </div>
+            <h1 class="card-title display-4">@Model.Name</h1>
+            <p class="card-text lead">
+                @Model.Info
+            </p>
+
+
+            <div class="list-group house-info">
+                <p href="#" class="list-group-item list-group-item-action">
+                    Название: @Model.Name
+                </p>
+                <p class="list-group-item list-group-item-action">Тип: <span class="badge badge-primary">@Enum.GetName(typeof(HouseType), (Model.Type))</span></p>
+                <p class="list-group-item list-group-item-action">Улица: <span class="badge badge-warning">@Model.Street</span></p>
+                <p class="list-group-item list-group-item-action">Количество жителей: <span class="badge badge-info">@Model.MaxResidentsCount</span></p>
+                <p class="list-group-item list-group-item-action">Стоимость: <span class="badge badge-success">@Model.Price KZT</span></p>
+            </div>
+
+            <div class="house-seller">
+                <div class="card">
+                    <div class="card-header">
+                        Владелец дома
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.Owner.User.Login</h5>
+                        <p class="card-text">Электронная почта: <span class="badge badge-primary">@Model.Owner.User.Email</span></p>
+                        <p class="card-text">Мобильный номер: <span class="badge badge-success">@Model.Owner.User.PhoneNumber</span>.</p>
+                        <a href="#" class="btn d-inline btn-info">Связаться</a>
+                    </div>
+                </div>
+            </div>
+
+
+            @await Html.PartialAsync("../Comments/HouseComments", houseComments)
+        </div>
+    </div>
+</div>
+

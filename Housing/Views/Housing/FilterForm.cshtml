@@ -1,0 +1,29 @@
+﻿@model FilteredHouseDto
+    <div class="card" style="margin-top: 20px;">
+        <article class="card-body">
+            <form asp-controller="Housing" asp-action="Houses">
+                <div class="form-group">
+                    <label for="filterStreet">Улица</label>
+                    <input asp-for="@Model.Street" type="text" class="form-control" id="filterStreet" placeholder="Введите улицу...">
+                </div>
+                <div class="form-group">
+                    <label for="filterPrice">Стоимость</label>
+                    <select asp-for="@Model.Price" class="form-control" id="filterPrice">
+                        <option value="0">Выберите стоимость недвижимости...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filterType">Тип</label>
+                    <select asp-for="@Model.Type" asp-items="@new SelectList(Enum.GetNames(typeof(HouseType)))" class="form-control" id="filterType">
+                        <option value="none">Выберите тип недвижимости...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">Найти</button>
+                </div>
+            </form>
+            </article>
+        </div>
+            <script>
+                loadFilterPrices();
+            </script>
